@@ -74,7 +74,7 @@ public void insertData(SomeData data) throws DataDuplicatedException {
 ```
 
 ## IOUtils
-Apache commons-io 之中, 有 IOUtils 可以簡化許多 I/O 存取的. 可以多加利用.
+Apache commons-io 之中, 有 IOUtils 與 FileUtils 。可以簡化許多 I/O 存取的. 可以多加利用.
 https://commons.apache.org/proper/commons-io/
 
 ```xml
