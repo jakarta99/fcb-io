@@ -37,38 +37,7 @@ public class FileApp {
 				System.out.print((char) j);
 			}
 			
-			String openApiFile = "c:\\data\\A17000000J-030266-pJX.csv";
-			BufferedReader br = new BufferedReader(new FileReader(openApiFile));
-			String lineData;
-			
-			int idx = 0;
-			
-			List<SexRatio> result = new ArrayList<SexRatio>();
-			
-			while( (lineData = br.readLine()) != null) {
-				
-				idx = idx+1;
-				
-				if(idx == 1) continue;
-				
-				System.out.println(lineData);
-				String[] data = lineData.split(",");
-				
-				
-				SexRatio sexRatio = new SexRatio();
-				sexRatio.setType(data[0]);
-				
-				String tempYear = data[1];
-				tempYear = tempYear.substring(0, tempYear.indexOf("年"));
-				sexRatio.setYear(Integer.valueOf(tempYear));
-				sexRatio.setRatio(new BigDecimal(data[2]));
-				
-				System.out.println(sexRatio);
-				
-				result.add(sexRatio);
-				
-			}
-			
+			List<SexRatio> result = new SexRatioService().loadFromFile();
 			System.out.println("目前已經有 "+result.size()+"筆資料");
 			
 		} catch (FileNotFoundException e) {
