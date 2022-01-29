@@ -73,11 +73,38 @@ public void insertData(SomeData data) throws DataDuplicatedException {
 }
 ```
 
+## IOUtils
+Apache commons-io 之中, 有 IOUtils 可以簡化許多 I/O 存取的. 可以多加利用.
+https://commons.apache.org/proper/commons-io/
+
+```xml
+<dependency>
+    <groupId>commons-io</groupId>
+    <artifactId>commons-io</artifactId>
+    <version>2.11.0</version>
+</dependency>
+```
+
 
 ## Homework
 到 https://data.gov.tw/ 開放政府平台抓下一個 csv 檔案, 將之轉為 List<物件> .
 
+建立一個 Service 與對應的 Type Class.
 
+```java
+public List<SexRatio> loadFromFile() throws IOException { 
+  List<SexRatio> result = new ArrayList<SexRatio>();
+
+  // 讀檔
+  
+  // 迴圈讀一行資料
+  // split 切割
+  // 設值
+  // 放到 List 之中
+
+  return result;
+}
+```
 
 
 
