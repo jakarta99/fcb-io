@@ -12,7 +12,8 @@ public class FeaturedStoreApp {
 		List<StoreRow> row = new ArrayList<StoreRow>();
 		try {
 			row = fss.loadFromFile();
-			fss.writeFile(row);
+			fss.writeTxtFile(row);
+			fss.writeXlsFile(row);
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("找不到檔案");
