@@ -85,6 +85,9 @@ https://commons.apache.org/proper/commons-io/
 </dependency>
 ```
 
+## Reference
+
+Java 技術手冊 Chapter 10 I/O 與 Chapter 14 NIO/NIO2
 
 ## Homework
 到 https://data.gov.tw/ 開放政府平台抓下一個 csv 檔案, 將之轉為 List<物件> .
