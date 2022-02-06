@@ -14,7 +14,7 @@ public class VehicleSharingService {
     public List<VehicleSharing> loadFromFile() throws IOException {
 
 
-        String openApiFile = "/Users/xiechengrong/Desktop/workspace/fcb-io/臺北市共享運具許可情形.csv";
+        String openApiFile = "/Users/xiechengrong/Desktop/workspace/fcb-io/VehicleSharing.csv";
         BufferedReader br = new BufferedReader(new FileReader(openApiFile));
         String lineData;
         int idx = 0;
