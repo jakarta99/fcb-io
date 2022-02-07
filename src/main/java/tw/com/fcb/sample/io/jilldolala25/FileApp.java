@@ -7,17 +7,17 @@ import java.util.List;
 public class FileApp {
     public static void main(String[] args) {
         try {
-        File file = new File("C:\\data\\data.txt");
+//        File file = new File("C:\\data\\data.txt");
+//
+//
+//            FileReader fileReader = new FileReader(file);
+//            int i = 0;
+//            while(( i = fileReader.read()) != -1){
+//                System.out.print((char)i);
+//            }
 
 
-            FileReader fileReader = new FileReader(file);
-            int i = 0;
-            while(( i = fileReader.read()) != -1){
-                System.out.print((char)i);
-            }
-
-
-            String inputFile = "c:\\data\\maskSupport.csv";
+            String inputFile = "c:\\data\\maskdata.csv";
             BufferedReader fileInputStream = new BufferedReader(new FileReader(inputFile));
             String lineData ;
             List<MaskSupport> maskList = new ArrayList<>();
@@ -29,15 +29,19 @@ public class FileApp {
                 String[] data = lineData.split(",");
 
                 MaskSupport maskSupport = new MaskSupport();
-                maskSupport.setDate(data[0]);
-                maskSupport.setMaskCount(data[1]);
-                maskSupport.setName(data[2]);
+                maskSupport.setMedicalcode(data[0]);
+                maskSupport.setMedicalname(data[1]);
+                maskSupport.setMedicaladdress(data[2]);
+                maskSupport.setMedicalphone(data[3]);
+                maskSupport.setAldultcount(data[4]);
+                maskSupport.setKidscount(data[5]);
+                maskSupport.setDate(data[6]);
 
                 System.out.println(maskSupport);
 
                 maskList.add(maskSupport);
             }
-            System.out.println("目前共有"+ maskList.size()+"筆口罩響應者");
+            System.out.println("目前共有"+ maskList.size()+"筆 健保特約機構");
 
         } catch (FileNotFoundException e) {
             System.out.println("檔案找不到");

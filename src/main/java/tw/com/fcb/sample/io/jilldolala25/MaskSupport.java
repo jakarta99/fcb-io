@@ -1,40 +1,80 @@
 package tw.com.fcb.sample.io.jilldolala25;
 
 public class MaskSupport {
+    String medicalcode;
+    String medicalname;
+    String medicaladdress;
+    String medicalphone;
+    String aldultcount;
+    String kidscount;
     String date;
-    String maskCount;
-    String name;
+
+    @Override
+    public String toString() {
+        return "MaskSupport{" +
+                "medicalcode='" + medicalcode + '\'' +
+                ", medicalname='" + medicalname + '\'' +
+                ", medicaladdress='" + medicaladdress + '\'' +
+                ", medicalphone='" + medicalphone + '\'' +
+                ", aldultcount='" + aldultcount + '\'' +
+                ", kidscount='" + kidscount + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
+
+    public String getMedicalcode() {
+        return medicalcode;
+    }
+
+    public void setMedicalcode(String medicalcode) {
+        this.medicalcode = medicalcode;
+    }
+
+    public String getMedicalname() {
+        return medicalname;
+    }
+
+    public void setMedicalname(String medicalname) {
+        this.medicalname = medicalname;
+    }
+
+    public String getMedicaladdress() {
+        return medicaladdress;
+    }
+
+    public void setMedicaladdress(String medicaladdress) {
+        this.medicaladdress = medicaladdress;
+    }
+
+    public String getMedicalphone() {
+        return medicalphone;
+    }
+
+    public void setMedicalphone(String medicalphone) {
+        this.medicalphone = medicalphone;
+    }
+
+    public String getAldultcount() {
+        return aldultcount;
+    }
+
+    public void setAldultcount(String aldultcount) {
+        this.aldultcount = aldultcount;
+    }
+
+    public String getKidscount() {
+        return kidscount;
+    }
+
+    public void setKidscount(String kidscount) {
+        this.kidscount = kidscount;
+    }
 
     public String getDate() {
         return date;
     }
 
-    @Override
-    public String toString() {
-        return "MaskSupport{" +
-                "date='" + date + '\'' +
-                ", maskCount='" + maskCount + '\'' +
-                ", name='" + name + '\'' +
-                '}';
-    }
-
     public void setDate(String date) {
         this.date = date;
-    }
-
-    public String getMaskCount() {
-        return maskCount;
-    }
-
-    public void setMaskCount(String maskCount) {
-        this.maskCount = maskCount;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 }
