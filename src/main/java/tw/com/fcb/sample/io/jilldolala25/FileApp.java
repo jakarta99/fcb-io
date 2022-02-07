@@ -7,9 +7,10 @@ import java.util.List;
 public class FileApp {
     public static void main(String[] args) {
         try {
-             List<MaskMedical> maskList = new MaskMedicalService().LoadMedicalFile();
-
-            System.out.println("目前共有"+ maskList.size()+"筆 健保特約機構");
+//             List<MaskMedical> maskList = new MaskMedicalService().LoadMedicalFile();
+            MaskMedicalService maskWrite = new MaskMedicalService();
+            maskWrite.LoadMedicalFile();
+            maskWrite.FileWriter();
 
         } catch (FileNotFoundException e) {
             System.out.println("檔案找不到");
