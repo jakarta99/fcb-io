@@ -1,6 +1,6 @@
 package tw.com.fcb.sample.io.jilldolala25;
 
-public class MaskSupport {
+public class MaskMedical {
     String medicalcode;
     String medicalname;
     String medicaladdress;
@@ -11,7 +11,7 @@ public class MaskSupport {
 
     @Override
     public String toString() {
-        return "MaskSupport{" +
+        return "MaskMedical{" +
                 "medicalcode='" + medicalcode + '\'' +
                 ", medicalname='" + medicalname + '\'' +
                 ", medicaladdress='" + medicaladdress + '\'' +

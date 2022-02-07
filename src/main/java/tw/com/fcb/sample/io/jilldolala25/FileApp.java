@@ -7,32 +7,8 @@ import java.util.List;
 public class FileApp {
     public static void main(String[] args) {
         try {
+             List<MaskMedical> maskList = new MaskMedicalService().LoadMedicalFile();
 
-
-            String inputFile = "c:\\data\\maskdata.csv";
-            BufferedReader fileInputStream = new BufferedReader(new FileReader(inputFile));
-            String lineData ;
-            List<MaskSupport> maskList = new ArrayList<>();
-            int count = 0;
-            while ((lineData = fileInputStream.readLine()) != null ){
-                count ++;
-                if (count == 1) continue;
-
-                String[] data = lineData.split(",");
-
-                MaskSupport maskSupport = new MaskSupport();
-                maskSupport.setMedicalcode(data[0]);
-                maskSupport.setMedicalname(data[1]);
-                maskSupport.setMedicaladdress(data[2]);
-                maskSupport.setMedicalphone(data[3]);
-                maskSupport.setAldultcount(data[4]);
-                maskSupport.setKidscount(data[5]);
-                maskSupport.setDate(data[6]);
-
-                System.out.println(maskSupport);
-
-                maskList.add(maskSupport);
-            }
             System.out.println("目前共有"+ maskList.size()+"筆 健保特約機構");
 
         } catch (FileNotFoundException e) {
