@@ -55,7 +55,7 @@ public class FileRepository {
 			System.out.println();
 			while(resultSet.next()) {
 				for(int i = 1 ; i <= columns ; i++)
-					System.out.printf("%-8s\t", resultSet.getObject(i));
+					System.out.printf("%-15s\t", resultSet.getObject(i));
 				System.out.println();
 			}
 			
