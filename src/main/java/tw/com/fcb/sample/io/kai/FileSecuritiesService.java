@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -13,14 +14,16 @@ import java.util.List;
 
 public class FileSecuritiesService {
 	List<FileSecurities> listSecurities = null;
+	FileRepository fileRepository = null;
 	
 	public FileSecuritiesService() {}
 	
-	// readFile ... 
+	// readFile ... into db
 	public void readFile() {
 		FileReader fileReader = null;
 		BufferedReader bufferedReader = null;
 		FileSecurities fileSecurities = null;
+		fileRepository = new FileRepository();
 
 		try {
 			fileReader = new FileReader("data.csv");
@@ -44,17 +47,23 @@ public class FileSecuritiesService {
 				fileSecurities.setEtfName(tokenData[5]);
 				fileSecurities.setEtfTransaction(tokenData[6]);
 				
+				// listSecurties
 				listSecurities.add(fileSecurities);
+				
+				// INSERT INTO DB...
+				fileRepository.insertData(fileSecurities);
+				
+				// sort data by sotckname
 				sortStockName();
 				System.out.println(fileSecurities);
 			}
 			System.out.println("共有 " + listSecurities.size() + " 筆資料");
 			
 			// 按照股票代號排序 (test...)
-			System.out.println("\n股票代號排序");
-			for(FileSecurities f : listSecurities) {
-				System.out.println(f);
-			}
+//			System.out.println("\n股票代號排序");
+//			for(FileSecurities f : listSecurities) {
+//				System.out.println(f);
+//			}
 		}
 		catch(FileNotFoundException e) {
 			System.out.println("檔案不存在");
@@ -82,21 +91,40 @@ public class FileSecuritiesService {
 		}
 	}
 	
-	// writeFile ... 
+	// writeFile ... from db
 	public void writeFile() {
 		FileWriter fileWriter = null;
 		BufferedWriter bufferedWriter = null;
+		ResultSet resultSet = null;
+		fileRepository = new FileRepository();
 		
 		try {
 			fileWriter = new FileWriter("dataW.txt", true);
 			bufferedWriter = new BufferedWriter(fileWriter);
 			
-			for(int i = 0 ; i < listSecurities.size() ; i++) {
-				String resultString = securituesToString(i);
-				bufferedWriter.write(resultString);
+			resultSet = fileRepository.selectOrderData();
+			
+			String result = "";
+			while(resultSet.next()) {
+				result = resultSet.getString("stockorder") + "," +
+						resultSet.getString("stockcode") + "," +
+						resultSet.getString("stockname") + "," +
+						resultSet.getString("stocktransaction") + "," +
+						resultSet.getString("etfcode") + "," +
+						resultSet.getString("etfname") + "," +
+						resultSet.getString("etftransaction");
+				
+				bufferedWriter.write(result);
 				bufferedWriter.newLine();
 			}
 			bufferedWriter.close();
+			
+//			for(int i = 0 ; i < listSecurities.size() ; i++) {
+//				String resultString = securituesToString(i);
+//				bufferedWriter.write(resultString);
+//				bufferedWriter.newLine();
+//			}
+//			bufferedWriter.close();
 			
 		}
 		catch(FileNotFoundException e) {
@@ -122,6 +150,11 @@ public class FileSecuritiesService {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public void selectData() {
+		fileRepository = new FileRepository();
+		fileRepository.selectData();
 	}
 	
 	public void sortStockName() {
