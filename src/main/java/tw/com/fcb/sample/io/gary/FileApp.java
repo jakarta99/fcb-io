@@ -6,8 +6,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.io.InputStreamReader;
 import java.util.List;
 
 public class FileApp {
@@ -24,7 +23,8 @@ public class FileApp {
 			
 			int i = 0;
 			while( (i = fr.read()) != -1) {
-				System.out.print((char) i);
+				System.out.print( i+":"+Integer.toHexString(i)+":");
+				System.out.print((char) i+";");
 			}
 			
 			System.out.println("");
@@ -34,7 +34,8 @@ public class FileApp {
 			
 			int j = 0;
 			while( (j = fis.read()) != -1) {
-				System.out.print((char) j);
+				System.out.print((int) j+":");
+				System.out.print((char) j+";");
 			}
 			
 			List<SexRatio> result = new SexRatioService().loadFromFile();
