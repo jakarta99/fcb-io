@@ -13,7 +13,7 @@ public class MaskMedicalService {
     MaskMedicalRepository maskMedicalRepository;
 
 
-    public MaskMedicalService() throws SQLException {
+    public MaskMedicalService()  {
     }
 
     public void LoadMedicalFile() throws IOException, SQLException {
@@ -24,6 +24,8 @@ public class MaskMedicalService {
         maskMedicalRepository = new MaskMedicalRepository();
         Connection conn = maskMedicalRepository.getConnection();
 
+        // insert前先將資料清空
+        maskMedicalRepository.delete(conn);
 
         int count = 0;
         while ((lineData = fileInputStream.readLine()) != null) {

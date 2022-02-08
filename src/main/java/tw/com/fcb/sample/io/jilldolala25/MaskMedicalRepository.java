@@ -35,8 +35,7 @@ public class MaskMedicalRepository {
     }
 
     public void insert(MaskMedical maskMedical, Connection conn) throws SQLException {
-        // insert前先將資料清空
-        delete(conn);
+
 
         Statement stmt = conn.createStatement();
         String sqlCmd = "INSERT INTO maskmedical values ('"
@@ -47,9 +46,9 @@ public class MaskMedicalRepository {
                 + "'" + maskMedical.getAldultcount() + "',"
                 + "'" + maskMedical.getKidscount() + "',"
                 + "'" + maskMedical.getDate()+ "')";
-        String sqlCmdCount = "select count(*) from maskmedical";
+
         stmt.executeUpdate(sqlCmd);
-        ResultSet rs = stmt.executeQuery(sqlCmdCount);
+
         stmt.close();
 
 
