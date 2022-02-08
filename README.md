@@ -174,7 +174,8 @@ while(rs.next()) {
 我們會盡可能在 Repository 往外部丟出 Exception, 讓 App 去 try / catch .
 所以 methods 之後會 throws SQLException.
 
-
+## Reference
+請參照 Java 技術手冊 第16章
 
 
 
