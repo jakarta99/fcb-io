@@ -8,12 +8,7 @@ import java.util.List;
 public class FileApp {
     public static void main(String[] args) {
         try {
-            MaskMedicalRepository maskMedicalRepository = new MaskMedicalRepository();
-            Connection conn = maskMedicalRepository.getConnection();
-            // insert前先delete
-            maskMedicalRepository.delete(conn);
 
-            //
             MaskMedicalService maskWrite = new MaskMedicalService();
             maskWrite.LoadMedicalFile();
 
