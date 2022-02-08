@@ -10,8 +10,8 @@ import java.util.List;
 
 public class MaskMedicalService {
     List<MaskMedical> maskList = null;
-    MaskMedicalRepository maskMedicalRepository = new MaskMedicalRepository();
-    Connection conn = maskMedicalRepository.getConnection();
+    MaskMedicalRepository maskMedicalRepository;
+
 
     public MaskMedicalService() throws SQLException {
     }
@@ -21,7 +21,10 @@ public class MaskMedicalService {
         BufferedReader fileInputStream = new BufferedReader(new FileReader(inputFile));
         String lineData;
         maskList = new ArrayList<>();
-        maskMedicalRepository.delete(conn);
+        maskMedicalRepository = new MaskMedicalRepository();
+        Connection conn = maskMedicalRepository.getConnection();
+
+
         int count = 0;
         while ((lineData = fileInputStream.readLine()) != null) {
             count++;
@@ -39,15 +42,15 @@ public class MaskMedicalService {
             maskMedical.setDate(data[6]);
 
 //            System.out.println(maskMedical);
-
+            // add to list
             maskList.add(maskMedical);
 
-
+            //insert into db
             maskMedicalRepository.insert(maskMedical,conn);
 
         }
-        System.out.println("MaskMedicalRepository select 5907360379= "
-                + maskMedicalRepository.getByMedicalCode("5907360379"));
+        System.out.println("資料庫內目前共有"+ maskMedicalRepository.count(conn)+"筆 健保特約機構");
+        // close db connection
         conn.close();
         System.out.println("目前共有"+ maskList.size()+"筆 健保特約機構");
 
@@ -57,7 +60,7 @@ public class MaskMedicalService {
 
         FileWriter fileWriter = new FileWriter("c:\\data\\outputFile.txt",false);
         BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
-        System.out.println("maskList size() =" +  maskList.size());
+
         for (int i = 0; i < maskList.size(); i++) {
             if (i == 0){
                 bufferedWriter.write("來源資料時間" + ","+ "醫事機構代碼" + ","+ "醫事機構名稱"+ "," + "醫事機構地址"+ "," + "醫事機構電話"+ "," + "成人口罩剩餘數" + ","+ "兒童口罩剩餘數");

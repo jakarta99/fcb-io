@@ -1,7 +1,5 @@
 package tw.com.fcb.sample.io.jilldolala25;
 
-import org.apache.commons.collections.map.StaticBucketMap;
-
 import java.sql.*;
 
 public class MaskMedicalRepository {
@@ -14,8 +12,8 @@ public class MaskMedicalRepository {
 
     }
 
-    public MaskMedical getByMedicalCode(String code) throws SQLException {
-        Connection conn = getConnection();
+    public MaskMedical getByMedicalCode(String code,Connection conn) throws SQLException {
+
         Statement stmt = conn.createStatement();
 
         String sqlCmd = "Select * from maskmedical where medicalcode = '" + code + "'";
@@ -23,21 +21,22 @@ public class MaskMedicalRepository {
         int totcount = 0;
         MaskMedical maskMedical = new MaskMedical();
         while (rs.next()){
-            maskMedical.setMedicalcode(rs.getString("medicalcode"));
-            maskMedical.setMedicalname(rs.getString("medicalname"));
-            maskMedical.setMedicaladdress(rs.getString("medicaladdress"));
-            maskMedical.setMedicalphone(rs.getString("medicalphone"));
-            maskMedical.setAldultcount(rs.getString("aldultcount"));
-            maskMedical.setKidscount(rs.getString("kidscount"));
-            maskMedical.setDate(rs.getString("updatedate"));
+            maskMedical.setMedicalcode(rs.getString("medical_code"));
+            maskMedical.setMedicalname(rs.getString("medical_name"));
+            maskMedical.setMedicaladdress(rs.getString("medical_address"));
+            maskMedical.setMedicalphone(rs.getString("medical_phone"));
+            maskMedical.setAldultcount(rs.getString("aldult_count"));
+            maskMedical.setKidscount(rs.getString("kids_count"));
+            maskMedical.setDate(rs.getString("update_date"));
             totcount ++;
         }
 
         return maskMedical;
     }
 
-    public int insert(MaskMedical maskMedical,Connection conn) throws SQLException {
-
+    public void insert(MaskMedical maskMedical, Connection conn) throws SQLException {
+        // insert前先將資料清空
+        delete(conn);
 
         Statement stmt = conn.createStatement();
         String sqlCmd = "INSERT INTO maskmedical values ('"
@@ -48,11 +47,24 @@ public class MaskMedicalRepository {
                 + "'" + maskMedical.getAldultcount() + "',"
                 + "'" + maskMedical.getKidscount() + "',"
                 + "'" + maskMedical.getDate()+ "')";
+        String sqlCmdCount = "select count(*) from maskmedical";
         stmt.executeUpdate(sqlCmd);
+        ResultSet rs = stmt.executeQuery(sqlCmdCount);
         stmt.close();
 
-        return  -1;
 
+
+    }
+
+    public int count(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        String sqlCmd = "Select count(*) from maskmedical";
+        ResultSet rs = stmt.executeQuery(sqlCmd);
+        int count = 0;
+        if (rs.next()) {
+            count = rs.getInt(1);
+        }
+        return count;
     }
     public void delete(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();

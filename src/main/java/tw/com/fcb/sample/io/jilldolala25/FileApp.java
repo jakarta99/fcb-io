@@ -1,15 +1,22 @@
 package tw.com.fcb.sample.io.jilldolala25;
 
 import java.io.*;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
 public class FileApp {
     public static void main(String[] args) {
         try {
-//             List<MaskMedical> maskList = new MaskMedicalService().LoadMedicalFile();
+            MaskMedicalRepository maskMedicalRepository = new MaskMedicalRepository();
+            Connection conn = maskMedicalRepository.getConnection();
+            // insert前先delete
+            maskMedicalRepository.delete(conn);
+
+            //
             MaskMedicalService maskWrite = new MaskMedicalService();
             maskWrite.LoadMedicalFile();
+
             maskWrite.FileWriter();
 
         } catch (FileNotFoundException e) {
