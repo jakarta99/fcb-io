@@ -1,14 +1,11 @@
 package tw.com.fcb.sample.io.weifan;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import tw.com.fcb.sample.io.gary.SexRatio;
 
 public class LanguageService {
 	
@@ -44,7 +41,7 @@ public class LanguageService {
 			
 		}
 
-		
+		br.close();
 		return result;
 		
 	}
