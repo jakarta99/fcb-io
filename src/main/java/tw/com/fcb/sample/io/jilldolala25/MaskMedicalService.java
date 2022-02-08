@@ -1,10 +1,10 @@
 package tw.com.fcb.sample.io.jilldolala25;
 
-import javax.print.attribute.standard.PrinterMakeAndModel;
+
 import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 import java.util.ArrayList;
 import java.util.List;
 
