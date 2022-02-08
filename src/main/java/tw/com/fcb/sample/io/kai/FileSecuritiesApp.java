@@ -4,6 +4,7 @@ public class FileSecuritiesApp {
 	public static void main(String[] args) {
 		FileSecuritiesService fileSecuritiesService = new FileSecuritiesService();
 		fileSecuritiesService.readFile();
+		fileSecuritiesService.selectData();
 		fileSecuritiesService.writeFile();
 	}
 }
