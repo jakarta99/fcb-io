@@ -19,6 +19,7 @@ public class VehicleSharingService {
         String lineData;
         int idx = 0;
         int year;
+        int month;
         int yearLast = 0;
         int yearTotal = 0;
 
@@ -38,8 +39,10 @@ public class VehicleSharingService {
             tempMonth = tempYearMonth.substring(4,tempYearMonth.indexOf("月"));
 
             year = Integer.valueOf(tempYear);
+            month = Integer.valueOf(tempMonth);
+
             vehicleSharing.setYear(year);
-            vehicleSharing.setMonth(Integer.valueOf(tempMonth));
+            vehicleSharing.setMonth(month);
 
             vehicleSharing.setBrand(data[1]);
 
@@ -70,9 +73,11 @@ public class VehicleSharingService {
             result.add(vehicleSharing);
 
 
-            if (year == yearLast || yearLast == 0){
+            if (year == yearLast && month == 12){
                 yearTotal += amount;
-            }else {
+            }else if (yearLast == 0){
+
+            } else {
                 total.put(yearLast,yearTotal);
                 yearTotal = 0;
             }
@@ -83,7 +88,7 @@ public class VehicleSharingService {
 
         total.put(yearLast,yearTotal);
         for (Integer i : total.keySet()) {
-            System.out.println( i + " 年度" + "共有 " + total.get(i) + " 台共享交通工具");
+            System.out.println( i + " 年12月" + "共有 " + total.get(i) + " 台共享交通工具");
         }
 
         return result;
