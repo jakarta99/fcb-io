@@ -109,7 +109,83 @@ public List<SexRatio> loadFromFile() throws IOException {
 }
 ```
 
+# Course 5 Database Connection
+## 安裝 Database Server
+Relational Opensource Database Server 有幾個選擇
+* MySQL https://www.mysql.com/ 吉祥物 : 海豚
+* PostgreSQL https://www.postgresql.org/ 吉祥物 : 大象
+* MariaDB https://mariadb.org/ 吉祥物 : 海獅
 
+可以挑選其中之一, 作為練習之用. 這次我們安裝 postgresql 作為範例資料庫, 在 windows 安裝時, locale 請選擇 default.
+先透過 pgAdmin 建立一個 testdb database.
+
+## 連結資料庫
+當我們要連結到一台資料庫, 我們必須要知道幾個資訊
+* 連線資料庫的種類與版本
+* 連線的 ip 與 Port
+* 連線的帳號與密碼
+
+根據資料庫的種類與版本, 我們專案必須要設定相關的 JDBC Driver (基本上就是一個 jar 檔案) 在 classpath 之中,
+可以直接在 maven pom.xml 檔案之中, 直接設定 dependency 即可.
+* MySQL https://mvnrepository.com/artifact/mysql/mysql-connector-java
+* Postgresql https://mvnrepository.com/artifact/org.postgresql/postgresql
+* MariaDB https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client
+
+接著, 要知道相關的 JDBC URL 的設定方式,
+* MySQL jdbc:mysql://localhost:3306/testdb
+* Postgresql jdbc:postgresql://localhost:5432/testdb
+* MariaDB jdbc:mariadb://localhost:3306/testdb
+
+在 Java 之中, 只需要透過 DriverManager 就可以建立連線
+
+````java
+String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
+String username = "postgres";
+String password = "postgres";
+Connection conn = DriverManager.getConnection(dbUrl, username, password);
+````
+## 建立 Statement
+透過 Connection 可以建立 Statement, 而 Statement 就是執行 SQL 的物件
+````java
+Statement stmt = conn.createStatement();
+String sqlCmd = "SELECT * FROM FRUIT";
+ResultSet rs = stmt.executeQuery(sqlCmd);
+
+````
+Statement 執行的方式主要有兩種
+* executeQuery
+* executeUpdate
+透過 executeQuery 是查詢用, 其他 insert/update/delete 是 executeUpdate,
+這兩種的 return 物件也有點不同, executeQuery 回傳是 ResultSet 結果集合, executeUpdate 則是 int 就是影響的筆數.
+
+
+## 取值
+通常我們會取得 ResultSet 之後, 進行資料轉換
+````java
+Fruit fruit = new Fruit();
+while(rs.next()) {
+   fruit.setCode(rs.getString("CODE"));
+   fruit.setName(rs.getString("NAME"));
+   fruit.setPrice(rs.getInt("PRICE"));
+}
+````
+
+## Exception Handling
+我們會盡可能在 Repository 往外部丟出 Exception, 讓 App 去 try / catch .
+所以 methods 之後會 throws SQLException.
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 
 
