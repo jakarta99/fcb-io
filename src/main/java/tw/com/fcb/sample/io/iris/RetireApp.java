@@ -10,19 +10,29 @@ public class RetireApp {
 
         FileReader fr = null;
         FileInputStream fis = null;
-
         try {
             fr = new FileReader(file);
-
             int i = 0;
             while( (i = fr.read()) != -1) {
                 System.out.print((char) i);
             }
-
             System.out.print("\n");
 
             List<RetireAge> result = new RetireAgeService().loadFromFile();
             System.out.println("目前已經有 "+result.size()+"筆資料");
+            
+//***       將上述檔案內容寫入資料庫
+            RetireRepository rey = new RetireRepository();
+            for(RetireAge inx : result) {
+            	rey.inserDB(inx);
+            }
+            System.out.println("已成功寫入testdb資料庫");
+            
+//***       依TYPE刪除資料庫內資料
+//            for(RetireAge inx : result) {
+//            	rey.deleteDB(inx.getType());
+//            }
+//            System.out.println("已成功刪除testdb之部分資料");
 
         } catch (FileNotFoundException e) {
             System.out.println("找不到檔案");
@@ -49,7 +59,6 @@ public class RetireApp {
                 e.printStackTrace();
             }
         }
-
 	}
 
 }
