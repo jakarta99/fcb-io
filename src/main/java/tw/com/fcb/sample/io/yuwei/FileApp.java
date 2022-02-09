@@ -11,9 +11,11 @@ public class FileApp {
 		DividendService dividendService = new DividendService();
 		List<Dividend> result = new ArrayList<Dividend>();
 		
+		
 		try {
 			result = dividendService.loadFromFile();
 			System.out.println("目前已經有 "+result.size()+"筆資料");
+			dividendService.fileWrite();
 		} catch (FileNotFoundException e) {
 			System.out.println("找不到檔案");
 			e.printStackTrace();

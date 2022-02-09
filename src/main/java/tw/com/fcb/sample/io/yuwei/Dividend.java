@@ -2,13 +2,13 @@ package tw.com.fcb.sample.io.yuwei;
 
 public class Dividend {
 	
-	private String allocationOfAnnual;
+	private int allocationOfAnnual;
 	
 	private double cashDividend;
 	
 	private double stockDividend;
 	
-	private String  total;
+	private double  total;
 	
 	private double totalCashDividendUnit;
 	
@@ -26,12 +26,12 @@ public class Dividend {
 	}
 
 
-	public String getAllocationOfAnnual() {
+	public int getAllocationOfAnnual() {
 		return allocationOfAnnual;
 	}
 
 
-	public void setAllocationOfAnnual(String allocationOfAnnual) {
+	public void setAllocationOfAnnual(int allocationOfAnnual) {
 		this.allocationOfAnnual = allocationOfAnnual;
 	}
 
@@ -56,12 +56,12 @@ public class Dividend {
 	}
 
 
-	public String getTotal() {
+	public double getTotal() {
 		return total;
 	}
 
 
-	public void setTotal(String total) {
+	public void setTotal(double total) {
 		this.total = total;
 	}
 
@@ -94,5 +94,8 @@ public class Dividend {
 	public void setIssuingCompany(String issuingCompany) {
 		this.issuingCompany = issuingCompany;
 	}
+
+
+
 
 }
