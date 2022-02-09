@@ -3,18 +3,27 @@ package tw.com.fcb.sample.io.copykobe0103;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ConsumptionService {
 
-    public List<Consumption> inputFile() throws IOException {
+    public List<Consumption> inputFile() throws IOException, SQLException {
         //信用卡跨境消費統計資料檔位置
         String fileLocation = "/Users/copykobe/Downloads/BANK_MCT_ALL_ICR.CSV";
         BufferedReader bufferedReader = new BufferedReader(new FileReader(fileLocation));
         String rowData;
         int index = 0;
+
+        //連接DB
+        Connection conn = getConnection();
+        Statement stmt = conn.createStatement();
+
         List<Consumption> result = new ArrayList<Consumption>();
         while ((rowData = bufferedReader.readLine()) != null){
             index++;
@@ -61,10 +70,36 @@ public class ConsumptionService {
 
             System.out.println(consumption);
 
+            //insert DB
+            String sqlCmd = "INSERT INTO consumption values ("
+                    + "'"+consumption.getYearMonth()+"', "
+                    + "'"+consumption.getRegion()+"', "
+                    + "'" +consumption.getCrossBorderPercentage()+"', "
+                    + "" +consumption.getCardCount()+", "
+                    + "" +consumption.getTotalTradeCount()+", "
+                    + "" +consumption.getTotalTradeAmount()+", "
+                    + "" +consumption.getCrossBorderCount()+", "
+                    + "" +consumption.getTotalCrossBorderAmount()+""
+                    + ")";
+//            System.out.println(sqlCmd);
+            stmt.executeUpdate(sqlCmd);
+
             result.add(consumption);
         }
+        conn.close();
+        stmt.close();
+
         return result;
     }
 
+
+    private Connection getConnection() throws SQLException {
+        //Class.forName("org.postgresql.Driver");
+        String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
+        String username = "postgres";
+        String password = "postgres";
+        return DriverManager.getConnection(dbUrl, username, password);
+
+    }
 
 }
