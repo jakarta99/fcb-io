@@ -5,8 +5,8 @@ public class MaskMedical {
     String medicalname;
     String medicaladdress;
     String medicalphone;
-    String aldultcount;
-    String kidscount;
+    int aldultcount;
+    int kidscount;
     String date;
 
     @Override
@@ -54,19 +54,19 @@ public class MaskMedical {
         this.medicalphone = medicalphone;
     }
 
-    public String getAldultcount() {
+    public int getAldultcount() {
         return aldultcount;
     }
 
-    public void setAldultcount(String aldultcount) {
+    public void setAldultcount(int aldultcount) {
         this.aldultcount = aldultcount;
     }
 
-    public String getKidscount() {
+    public int getKidscount() {
         return kidscount;
     }
 
-    public void setKidscount(String kidscount) {
+    public void setKidscount(int kidscount) {
         this.kidscount = kidscount;
     }
 
