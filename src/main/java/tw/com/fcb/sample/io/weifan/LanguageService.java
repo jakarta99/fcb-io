@@ -19,7 +19,7 @@ public class LanguageService {
 		String lineData;
 		
 		while( (lineData = br.readLine()) != null) {
-			
+			lineData = lineData.replaceAll("\"", "");
 			String[] data = lineData.split(",");
 			
 			

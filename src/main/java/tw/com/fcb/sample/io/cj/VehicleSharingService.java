@@ -1,6 +1,7 @@
 package tw.com.fcb.sample.io.cj;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,7 +12,7 @@ public class VehicleSharingService {
     HashMap<Integer, Integer> total = new HashMap<Integer, Integer>();
 
 
-    public List<VehicleSharing> loadFromFile() throws IOException {
+    public List<VehicleSharing> loadFromFile() throws IOException, SQLException {
 
         DataInputStream in = new DataInputStream(new FileInputStream(new File("/Users/xiechengrong/Desktop/workspace/fcb-io/VehicleSharing.csv")));
         BufferedReader br= new BufferedReader(new InputStreamReader(in,"MS950"));
@@ -22,6 +23,9 @@ public class VehicleSharingService {
         int month;
         int yearLast = 0;
         int yearTotal = 0;
+
+        VehicleRepository repository = new VehicleRepository();
+        System.out.println(repository.truncate());
 
         while ((lineData = br.readLine()) != null) {
             idx = idx+1;
@@ -72,6 +76,7 @@ public class VehicleSharingService {
             System.out.println(vehicleSharing);
             result.add(vehicleSharing);
 
+            repository.insert(vehicleSharing);
 
             if (year == yearLast && month == 12){
                 yearTotal += amount;

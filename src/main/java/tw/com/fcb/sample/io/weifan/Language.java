@@ -15,6 +15,11 @@ public class Language {
 		return "Language [Seq=" + Seq + ", CreateDate=" + CreateDate + ", year=" + year + ", ChineseName=" + ChineseName
 				+ ", Level=" + Level + ", SignNum=" + SignNum + ", JoinNum=" + JoinNum + ", PassNum=" + PassNum + "]";
 	}
+	public String toSqlcmd() {
+		return "insert into language values(" + Seq + ",'" + CreateDate + "', '" + year + "', '" + ChineseName
+				+ "','" + Level + "', '" + SignNum + "', '" + JoinNum + "', '" + PassNum + "');";
+	}
+	
 	public int getSeq() {
 		return Seq;
 	}
