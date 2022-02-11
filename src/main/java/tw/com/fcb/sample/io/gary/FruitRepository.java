@@ -5,6 +5,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FruitRepository {
 	
@@ -17,16 +19,39 @@ public class FruitRepository {
 			
 	}
 	
-	public Fruit getByCode(String code) throws SQLException {
+	public List<Fruit> findAll() throws SQLException {
+		Connection conn = getConnection();
+		Statement stmt = conn.createStatement();
+		
+		String sqlCmd = "select * from fruit";
+		ResultSet rs = stmt.executeQuery(sqlCmd);
+		
+		List<Fruit> fruits = new ArrayList<Fruit>();
+
+		Fruit fruit;
+		while(rs.next()) {
+			fruit = new Fruit();
+			fruit.setCode(rs.getString("code"));
+			fruit.setName(rs.getString("name"));
+			fruit.setPrice(rs.getInt("price"));
+			
+			fruits.add(fruit);
+		}
+		
+		return fruits;
+	}
+	
+	
+	public Fruit getById(Long id) throws SQLException {
 		
 		Connection conn = getConnection();
 		Statement stmt = conn.createStatement();
 		
-		String sqlCmd = "select * from fruit where code = '"+code+"'";
+		String sqlCmd = "select * from fruit where id = '"+id+"'";
 		ResultSet rs = stmt.executeQuery(sqlCmd);
 		
 		Fruit fruit = new Fruit();
-		while(rs.next()) {
+		if(rs.next()) {
 			fruit.setCode(rs.getString("code"));
 			fruit.setName(rs.getString("name"));
 			fruit.setPrice(rs.getInt("price"));
@@ -35,20 +60,43 @@ public class FruitRepository {
 		return fruit;
 	}
 	
-	public int insert(Fruit fruit) throws SQLException {
+	
+	public void insert(Fruit fruit) throws SQLException {
 		
 		Connection conn = getConnection();
 		Statement stmt = conn.createStatement();
 		
-		String sqlCmd = "INSERT INTO fruit values ("
+		String sqlCmd = "INSERT INTO fruit(code, name, price) values ("
 				+ "'"+fruit.getCode()+"', "
 				+ "'"+fruit.getName()+"', "
 				+ "" +fruit.getPrice()+""
-				+ ")";
-		stmt.executeUpdate(sqlCmd);
+				+ ") returning id";
 		
-		return -1;
+		ResultSet rs = stmt.executeQuery(sqlCmd);
+		if(rs.next()) {
+			int id = rs.getInt("id");
+			fruit.setId(Long.valueOf(id));
+		} else {
+			// do something if can't 
+		}
+		
+		
 	}
+	
+	
+	public void update(Fruit fruit) throws SQLException {
+		
+		
+	}
+	
+	public void delete(Long id) throws SQLException {
+		
+	}
+	
+	
+	
+	
+	
 	
 
 }

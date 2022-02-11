@@ -1,6 +1,8 @@
 package tw.com.fcb.sample.io.gary;
 
 public class Fruit {
+	
+	Long id;
 
 	String code;
 	String name;
@@ -8,12 +10,18 @@ public class Fruit {
 	
 	
 	
+	
+	
 	@Override
 	public String toString() {
-		return "Fruit [code=" + code + ", name=" + name + ", price=" + price + "]";
+		return "Fruit [id=" + id + ", code=" + code + ", name=" + name + ", price=" + price + "]";
 	}
-	
-	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getCode() {
 		return code;
 	}
