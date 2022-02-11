@@ -9,13 +9,25 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MaskMedicalService {
-    List<MaskMedical> maskList = null;
-    MaskMedicalRepository maskMedicalRepository;
+    List<MaskMedical> maskList ;
+    MaskMedicalRepository maskMedicalRepository ;
 
 
     public MaskMedicalService()  {
     }
+    public void runCrud() throws SQLException {
 
+            MaskMedical maskMedical = setMaskMedical();
+            maskMedicalRepository.insertOneRecord(maskMedical);
+            maskMedicalRepository.getById(maskMedical.getId());
+            maskMedicalRepository.updateByKey(maskMedical.getId());
+            maskList = maskMedicalRepository.findALl();
+            System.out.println("資料庫內之資料總共 = " + maskList.size()+ "筆");
+            maskMedicalRepository.deleteByKey(maskMedical.getId());
+            maskList = maskMedicalRepository.findALl();
+            System.out.println("資料庫內之刪除資料後總共 = " + maskList.size()+ "筆");
+
+    }
     public void LoadMedicalFile()  {
         String inputFile = "c:\\data\\maskdata.csv";
 
@@ -64,7 +76,17 @@ public class MaskMedicalService {
             throw new RuntimeException(e);
         }
     }
-
+    public MaskMedical  setMaskMedical(){
+        MaskMedical maskMedical = new MaskMedical();
+        maskMedical.setMedicalcode("2331200010");
+        maskMedical.setMedicalname("新北市坪林區衛生所");
+        maskMedical.setMedicaladdress("新北市坪林區坪林街１０４號");
+        maskMedical.setMedicalphone("(02)26656272");
+        maskMedical.setAldultcount(1410);
+        maskMedical.setKidscount(1440);
+        maskMedical.setDate("2022/2/8");
+        return maskMedical;
+    }
 
     public void FileWriter() throws IOException {
 
