@@ -84,6 +84,17 @@ public class FileSecuritiesService {
 		fw.close();
 	}
 	
+	// findOrderDataByCols()
+	public void findOrderDataByCols(String column) throws Exception {
+		fileRepository = new FileRepository();
+		listSecurities = fileRepository.findOrderDataByCols(column);
+		
+		System.out.println("共有 " + listSecurities.size() + " 筆資料");
+		for(int i = 0 ; i < listSecurities.size() ; i++) {
+			System.out.println(listSecurities.get(i).toString());
+		}
+	}
+	
 	// findAll()
 	public void findAll() throws Exception {
 		fileRepository = new FileRepository();

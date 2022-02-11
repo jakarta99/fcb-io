@@ -85,6 +85,35 @@ public class FileRepository {
 		return list ;
 	}
 	
+	// findOrderDataByCols()
+	public List<FileSecurities> findOrderDataByCols(String column) throws Exception {
+		Connection connection = null;
+		PreparedStatement pStatement = null;
+		ResultSet resultSet = null;
+		
+		connection = getConnection();
+			
+		String selectSql = "SELECT * FROM stock ORDER BY " + column + "";
+		System.out.println(selectSql);
+		pStatement = connection.prepareStatement(selectSql);
+		resultSet = pStatement.executeQuery();
+		
+		list = new ArrayList<FileSecurities>();
+		while(resultSet.next()) {
+			fileSecurities = new FileSecurities();
+			fileSecurities.setSecuritiesOrder(resultSet.getString("stockorder"));
+			fileSecurities.setStockCode(resultSet.getString("stockcode"));
+			fileSecurities.setStockName(resultSet.getString("stockname"));
+			fileSecurities.setStockTransaction(resultSet.getString("stocktransaction"));
+			fileSecurities.setEtfCode(resultSet.getString("etfcode"));
+			fileSecurities.setEtfName(resultSet.getString("etfname"));
+			fileSecurities.setEtfTransaction(resultSet.getString("etftransaction"));
+			list.add(fileSecurities);
+		}
+		
+		return list ;
+	}
+	
 	// findById()
 	public List<FileSecurities> findById(String stockOrder) throws Exception {
 		Connection connection = null;
