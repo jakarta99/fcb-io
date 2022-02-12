@@ -12,14 +12,15 @@ public class FileApp {
             MaskMedicalService maskWrite = new MaskMedicalService();
             maskWrite.LoadMedicalFile();
 
-            maskWrite.FileWriter();
+////            maskWrite.FileWriter();
+              maskWrite.runCrud();
 
-        } catch (FileNotFoundException e) {
-            System.out.println("檔案找不到");
-
-        } catch (IOException e) {
-            System.out.println("檔案已毀損");
-            e.printStackTrace();
+//        } catch (FileNotFoundException e) {
+//            System.out.println("檔案找不到");
+//
+//        } catch (IOException e) {
+//            System.out.println("檔案已毀損");
+//            e.printStackTrace();
         } catch(Exception e) {
             System.out.println("unknown");
             e.printStackTrace();

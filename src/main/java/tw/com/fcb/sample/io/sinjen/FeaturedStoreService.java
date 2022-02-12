@@ -200,4 +200,43 @@ public class FeaturedStoreService {
 		fileOut.flush();
 		fileOut.close();
 	}
+	
+	public void runCrud() {
+		FeaturedStoreRepository fsr = new FeaturedStoreRepository();
+		List<StoreRow> list = new ArrayList<StoreRow>();
+		List<StoreRow> addOne = new ArrayList<StoreRow>();
+		StoreRow row = new StoreRow();
+
+		// 讀取全部筆數資料
+		list = fsr.getDBQueryResult();
+		
+		// List<StoreRow> list.size()
+		//System.out.println("讀取DB:featured_store完成，共" + list.size() + "筆資料");
+		System.out.println("讀取DB:featured_store完成，count共" + fsr.count() + "筆資料");
+		
+		// 新增-Insert單筆資料
+		addOne.add(list.get(0));	//範例:複製第一筆資料
+		fsr.insertDB(addOne);
+		
+		/* 新增-Insert全部筆數資料
+		try {
+			row = loadFromFile();
+			fsr.insertDB(list);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} */
+		
+		// 查詢getById()
+		int id = list.get(list.size()-1).getId().intValue();	//範例:撈最後一筆id查詢資料
+		fsr.getById(id);
+
+		// 更新-Update單筆資料
+		row = list.get(list.size()-1);		//範例:撈最後一筆更新資料
+		row.setStoreTel("(02)8677-6929");	//範例:更新電話號碼欄位
+		fsr.update(row);
+
+		// 刪除-Delete單筆資料
+		fsr.delete(id);
+
+	}
 }

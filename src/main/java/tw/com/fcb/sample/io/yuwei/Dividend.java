@@ -2,6 +2,8 @@ package tw.com.fcb.sample.io.yuwei;
 
 public class Dividend {
 	
+	Long id;
+	
 	private int allocationOfAnnual;
 	
 	private double cashDividend;
@@ -17,9 +19,22 @@ public class Dividend {
 	private String issuingCompany;
 
 	
+	
+	public Long getId() {
+		return id;
+	}
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+
 	@Override
 	public String toString() {
-		return "Dividend [allocationOfAnnual=" + allocationOfAnnual + ", cashDividend=" + cashDividend
+		return "Dividend [id=" + id + ", allocationOfAnnual=" + allocationOfAnnual + ", cashDividend=" + cashDividend
 				+ ", stockDividend=" + stockDividend + ", total=" + total + ", totalCashDividendUnit="
 				+ totalCashDividendUnit + ", shareholdingRatio=" + shareholdingRatio + ", issuingCompany="
 				+ issuingCompany + "]";

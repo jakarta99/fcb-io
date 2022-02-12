@@ -1,6 +1,7 @@
 package tw.com.fcb.sample.io.copykobe0103;
 
 public class Consumption {
+    private Long id;
     private String yearMonth;
     private String region;
     private String crossBorderPercentage;
@@ -13,15 +14,24 @@ public class Consumption {
     @Override
     public String toString() {
         return "Consumption{" +
-                "yearMonth='" + yearMonth + '\'' +
+                "id=" + id +
+                ", yearMonth='" + yearMonth + '\'' +
                 ", region='" + region + '\'' +
-                ", crossBorderPersent='" + crossBorderPercentage + '\'' +
+                ", crossBorderPercentage='" + crossBorderPercentage + '\'' +
                 ", cardCount=" + cardCount +
                 ", totalTradeCount=" + totalTradeCount +
                 ", totalTradeAmount=" + totalTradeAmount +
                 ", crossBorderCount=" + crossBorderCount +
                 ", totalCrossBorderAmount=" + totalCrossBorderAmount +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getYearMonth() {

@@ -10,8 +10,55 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import tw.com.fcb.sample.io.jilldolala25.MaskMedical;
+
 public class DividendService {
 
+	
+	public void runCrud() throws SQLException {
+		
+		DividendRepository dividendRepository = new DividendRepository();
+		List<Dividend> dividendList = new ArrayList<Dividend>();
+		Dividend dividendData = setDividend();
+		
+		// 1.run findAll
+		dividendList = dividendRepository.findAll();
+		//2.List<Dividend> dividend.size = 0
+		System.out.println("Insert資料前，資料庫內之資料總共 = " + dividendList.size()+ "筆");
+		//3.insert
+		dividendRepository.insertData(dividendData);
+		dividendList = dividendRepository.findAll();
+		System.out.println("Insert資料後，資料庫內之資料總共 = " + dividendList.size()+ "筆");
+		
+		Dividend dividendInsertData; 
+		//4.getById(the Dividend.getId());
+		dividendInsertData = dividendRepository.getById(dividendData.getId());
+		System.out.println(dividendInsertData);
+		//5.update cash_dividend
+		dividendRepository.update(dividendInsertData);
+		dividendInsertData = dividendRepository.getById(dividendData.getId());
+		System.out.println(dividendInsertData);
+		//6.delete dividend by allocation of annual
+		dividendRepository.deleteById(dividendData.getId());
+		
+		
+		
+	}
+	
+	
+    public Dividend setDividend(){
+    	Dividend dividend = new Dividend();
+//    	dividend.setId((long)1);
+		dividend.setAllocationOfAnnual(111);
+		dividend.setCashDividend(2);
+		dividend.setStockDividend(2);
+		dividend.setTotal(4);
+		dividend.setTotalCashDividendUnit(40.24);
+		dividend.setShareholdingRatio(13.11);
+		dividend.setIssuingCompany("富邦金控");
+        return dividend;
+    }
+	
 	public List<Dividend> loadFromFile() throws IOException, SQLException {
 
 		// 讀檔
@@ -26,7 +73,7 @@ public class DividendService {
 		// 在 try 後方小括號初始化的資源會在離開 try 區塊時自動呼叫 close()
 		try (conn;br) {
 			// 先清空資料
-			dividendRepository.delete(conn);
+			dividendRepository.delete();
 			// 迴圈讀一行資料
 			while ((lineData = br.readLine()) != null) {
 				idx = idx + 1;
@@ -59,6 +106,7 @@ public class DividendService {
 	}
 
 	public void fileWrite() throws IOException, SQLException {
+
 		
 		// 寫檔
 		String writeFile = "C:\\fcb-workspace\\fcb-io\\write-file.txt";
@@ -88,5 +136,6 @@ public class DividendService {
 		
 		
 	}
+	
 	
 }

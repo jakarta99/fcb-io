@@ -1,6 +1,7 @@
 package tw.com.fcb.sample.io.jilldolala25;
 
 public class MaskMedical {
+    Long id;
     String medicalcode;
     String medicalname;
     String medicaladdress;
@@ -12,14 +13,23 @@ public class MaskMedical {
     @Override
     public String toString() {
         return "MaskMedical{" +
-                "medicalcode='" + medicalcode + '\'' +
+                "id=" + id +
+                ", medicalcode='" + medicalcode + '\'' +
                 ", medicalname='" + medicalname + '\'' +
                 ", medicaladdress='" + medicaladdress + '\'' +
                 ", medicalphone='" + medicalphone + '\'' +
-                ", aldultcount='" + aldultcount + '\'' +
-                ", kidscount='" + kidscount + '\'' +
+                ", aldultcount=" + aldultcount +
+                ", kidscount=" + kidscount +
                 ", date='" + date + '\'' +
                 '}';
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getMedicalcode() {

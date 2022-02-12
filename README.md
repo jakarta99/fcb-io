@@ -178,15 +178,72 @@ while(rs.next()) {
 請參照 Java 技術手冊 第16章
 
 
+# Course 6 Repository Standard Methods
+## 建立物件都具有 ID
+````java
+public class Model {
+   Long id;
+   
+   // getters and setters
+   
+}
+````
+  所以我們在建立 table 時, 在 postgresql 之中可以用 serial 的類型來建構 id
+  ````sql
+  create FRUIT (
+    id serial,
+    code varchar(50),
+    name varchar(200),
+    price integer
+  )
+ ````
+  
+  
+  
+## 建立標準的 Repository methods
 
+* List<Model> findAll();
+* Model findById(Long id);
+* void insert(Model model);
+* void update(Model model);
+* void delete(Long id);
 
+## 不要使用 Statement 避免 SQL-Injection
 
+改用 PreparedStatement
+````java
+String sqlCmd = "SELECT * FROM FRUIT WHERE ID = ?";
+PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
+pstmt.setLong(1, id);
+ResultSet rs = pstmt.executeQuery();
+````
 
+## 取得 auto increment ID 的回傳值
+因為我們交給資料庫去產生相關的 id, 那麼, 剛剛 insert 進去的資料,
+我們需要 model.setId( rs.getLong("id")); 回傳告訴前端的使用者,
+每個資料庫的設計有點不同, 以 postgres 來說,
+是透過 insert into ..... returning id; 
 
+如果我們是使用 PreparedStatement, 建立 statement 時, 就可以指定我們需要取得產生的 id, **Statement.RETURN_GENERATED_KEYS**,
+  再使用 pstmt.getGeneratedKeys(); 也可以取出產生的 id 值.
 
-
-
- 
+````java
+		Connection conn = getConnection();
+		String sqlCmd = "INSERT INTO FRUIT(code, name, price) VALUES (?,?,?)";
+		
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd, Statement.RETURN_GENERATED_KEYS);
+		
+		pstmt.setString(1, fruit.getCode());
+		pstmt.setString(2, fruit.getCode());
+		pstmt.setInt(3, fruit.getPrice());
+		
+		pstmt.executeUpdate();
+		ResultSet rs = pstmt.getGeneratedKeys();
+		if(rs.next()) {
+			int id = rs.getInt("id");
+			fruit.setId(Long.valueOf(id));
+		}
+````
 
 
 
