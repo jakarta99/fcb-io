@@ -18,11 +18,15 @@ public class FeaturedStoreApp {
 			//寫入txt檔案
 			fss.writeTxtFile(row);
 			//寫入DB檔案
-			fsr.insertDB_featured_store(row);
+			//fsr.insertDB_featured_store(row);
 			//讀取DB檔案
 			dbRow = fsr.getDBQueryResult();
 			//寫入xls檔案
 			fss.writeXlsFile(dbRow);
+			
+			//增刪查改
+			System.out.println("=====================");
+			fss.runCrud();
 			
 		} catch (FileNotFoundException e) {
 			System.out.println("找不到檔案");

@@ -125,43 +125,23 @@ public class BankRoeService {
 			file.createNewFile();
 			
 			FileWriter fw = new FileWriter(filePath, true);
-			StringBuilder sb = new StringBuilder();
-			
 			//寫title
-			sb.append("統計年度");
-			sb.append(",");
-			sb.append("統計月份");
-			sb.append(",");
-			sb.append("平均資產-新臺幣億元");
-			sb.append(",");
-			sb.append("平均淨值-新臺幣億元");
-			sb.append(",");
-			sb.append("稅前盈餘-新臺幣億元");
-			sb.append(",");
-			sb.append("資產報酬率(ROA)-%");
-			sb.append(",");
-			sb.append("淨值報酬率(ROE)-%");
-			sb.append("\n");
+			String tmpString = "統計年度,統計月份,平均資產-新臺幣億元,平均淨值-新臺幣億元," +
+				"稅前盈餘-新臺幣億元,資產報酬率(ROA)-%\n";
 			
 			for (int i = 0; i < fetchData.size(); i ++)
 			{
-				sb.append(fetchData.get(i).getStatisticalYear());
-				sb.append(",");
-				sb.append(fetchData.get(i).getStatisticalMonth());
-				sb.append(",");
-				sb.append(fetchData.get(i).getAverageAsset());
-				sb.append(",");
-				sb.append(fetchData.get(i).getAverageNetWorth());
-				sb.append(",");
-				sb.append(fetchData.get(i).getEbt());
-				sb.append(",");
-				sb.append(fetchData.get(i).getRoa());
-				sb.append(",");
-				sb.append(fetchData.get(i).getRoe());
-				sb.append("\n");
+				tmpString = tmpString +
+						fetchData.get(i).getStatisticalYear() + "," +
+						fetchData.get(i).getStatisticalMonth() + "," +
+						fetchData.get(i).getAverageAsset() + "," +
+						fetchData.get(i).getAverageNetWorth() + "," +
+						fetchData.get(i).getEbt() + "," +
+						fetchData.get(i).getRoa() + "," +
+						fetchData.get(i).getRoe() + "\n";
 			}
 			
-			fw.write(sb.toString());
+			fw.write(tmpString);
 			fw.close();
 		}
 		catch (IOException e) 

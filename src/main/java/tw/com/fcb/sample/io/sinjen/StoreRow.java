@@ -2,6 +2,7 @@ package tw.com.fcb.sample.io.sinjen;
 
 public class StoreRow {
 
+	private Long id;			//PRIMARY KEY
 	private String zone;		//商圈名稱
 	private String store;		//特色商家
 	private String storeTel;	//店家電話
@@ -11,6 +12,13 @@ public class StoreRow {
 	private String twd97Y;		//twd97經度
 	private String wgs84aX;		//wgs84a緯度
 	private String wgs84aY;		//wgs84a經度
+	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
 	public String getZone() {
 		return zone;
 	}
@@ -68,9 +76,9 @@ public class StoreRow {
 	
 	@Override
 	public String toString() {
-		return "StoreRow [zone=" + zone + ", store=" + store + ", storeTel=" + storeTel + ", storeAdd=" + storeAdd
-				+ ", storeProduct=" + storeProduct + ", twd97X=" + twd97X + ", twd97Y=" + twd97Y + ", wgs84aX="
-				+ wgs84aX + ", wgs84aY=" + wgs84aY + "]";
+		return "StoreRow [id=" + id + ", zone=" + zone + ", store=" + store + ", storeTel=" + storeTel + ", storeAdd="
+				+ storeAdd + ", storeProduct=" + storeProduct + ", twd97X=" + twd97X + ", twd97Y=" + twd97Y
+				+ ", wgs84aX=" + wgs84aX + ", wgs84aY=" + wgs84aY + "]";
 	}
 	
 }

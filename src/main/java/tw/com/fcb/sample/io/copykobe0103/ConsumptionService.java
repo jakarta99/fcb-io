@@ -20,8 +20,8 @@ public class ConsumptionService {
         String rowData;
         int index = 0;
 
-        //連接DB
-        Connection conn = getConnection();
+        ConsumptionRepository consumptionRepository = new ConsumptionRepository();
+        Connection conn = consumptionRepository.getConnection();
         Statement stmt = conn.createStatement();
 
         List<Consumption> result = new ArrayList<Consumption>();
@@ -60,7 +60,7 @@ public class ConsumptionService {
             double CrossBorderTradePercentage;
             CrossBorderTradePercentage = (Double.parseDouble(data[5]) / Double.parseDouble(data[3]))*100;
             DecimalFormat df = new DecimalFormat("###.##");
-            consumption.setCrossBorderPercentage(df.format(CrossBorderTradePercentage) + " %");
+            consumption.setCrossBorderPercentage(df.format(CrossBorderTradePercentage) + "%");
 
             consumption.setCardCount(Double.parseDouble(data[2]));
             consumption.setTotalTradeCount(Double.parseDouble(data[3]));
@@ -71,7 +71,10 @@ public class ConsumptionService {
             System.out.println(consumption);
 
             //insert DB
-            String sqlCmd = "INSERT INTO consumption values ("
+            String sqlCmd = "INSERT INTO consumption (YearMonth,Region,CrossBorderPercentage,"+
+                                                     "CardCount,TotalTradeCount,TotalTradeAmount,"+
+                                                     "CrossBorderCount,TotalCrossBorderAmount) " +
+                                                     " values ("
                     + "'"+consumption.getYearMonth()+"', "
                     + "'"+consumption.getRegion()+"', "
                     + "'" +consumption.getCrossBorderPercentage()+"', "
@@ -80,8 +83,8 @@ public class ConsumptionService {
                     + "" +consumption.getTotalTradeAmount()+", "
                     + "" +consumption.getCrossBorderCount()+", "
                     + "" +consumption.getTotalCrossBorderAmount()+""
-                    + ")";
-//            System.out.println(sqlCmd);
+                    + ") ";
+            System.out.println(sqlCmd);
             stmt.executeUpdate(sqlCmd);
 
             result.add(consumption);
@@ -93,13 +96,5 @@ public class ConsumptionService {
     }
 
 
-    private Connection getConnection() throws SQLException {
-        //Class.forName("org.postgresql.Driver");
-        String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
-        String username = "postgres";
-        String password = "postgres";
-        return DriverManager.getConnection(dbUrl, username, password);
-
-    }
 
 }
