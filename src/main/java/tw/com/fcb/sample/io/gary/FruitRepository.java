@@ -2,6 +2,7 @@ package tw.com.fcb.sample.io.gary;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -64,21 +65,21 @@ public class FruitRepository {
 	public void insert(Fruit fruit) throws SQLException {
 		
 		Connection conn = getConnection();
-		Statement stmt = conn.createStatement();
+		String sqlCmd = "INSERT INTO FRUIT(code, name, price) VALUES (?,?,?)";
 		
-		String sqlCmd = "INSERT INTO fruit(code, name, price) values ("
-				+ "'"+fruit.getCode()+"', "
-				+ "'"+fruit.getName()+"', "
-				+ "" +fruit.getPrice()+""
-				+ ") returning id";
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd, Statement.RETURN_GENERATED_KEYS);
 		
-		ResultSet rs = stmt.executeQuery(sqlCmd);
+		pstmt.setString(1, fruit.getCode());
+		pstmt.setString(2, fruit.getCode());
+		pstmt.setInt(3, fruit.getPrice());
+		
+		pstmt.executeUpdate();
+		ResultSet rs = pstmt.getGeneratedKeys();
 		if(rs.next()) {
 			int id = rs.getInt("id");
 			fruit.setId(Long.valueOf(id));
-		} else {
-			// do something if can't 
 		}
+
 		
 		
 	}

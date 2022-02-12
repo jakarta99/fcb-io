@@ -10,12 +10,16 @@ import org.junit.jupiter.api.Test;
 class FruitRepositoryTest {
 
 	@Test
-	void testFindAll() {
-		List<Fruit> fruits;
+	void testInsert() {
+		Fruit fruit = new Fruit();
+		fruit.setCode("A");
+		fruit.setName("Apple");
+		fruit.setPrice(100);
+		
+		FruitRepository fruitRepository = new FruitRepository();
 		try {
-			fruits = new FruitRepository().findAll();
-			assertEquals(4, fruits.size());
-			
+			fruitRepository.insert(fruit);
+			System.out.println(fruit);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
