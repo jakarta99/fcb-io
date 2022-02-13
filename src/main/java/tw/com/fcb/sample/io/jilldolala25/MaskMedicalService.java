@@ -5,27 +5,40 @@ import java.io.*;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class MaskMedicalService {
     List<MaskMedical> maskList ;
     MaskMedicalRepository maskMedicalRepository ;
-
+    SimpleDateFormat dtf = new SimpleDateFormat("yyyy/MM/dd");
+    Calendar calendar = Calendar.getInstance();
+    Date todayDate = calendar.getTime();
+    String updateDate = dtf.format(todayDate);
 
     public MaskMedicalService()  {
     }
     public void runCrud() throws SQLException {
 
             MaskMedical maskMedical = setMaskMedical();
+            // findAll
+            maskList = maskMedicalRepository.findALl();
+            System.out.println("新增資料前，資料庫資料總共 = " + maskList.size() + "筆");
+            // insert資料
             maskMedicalRepository.insertOneRecord(maskMedical);
-            maskMedicalRepository.getById(maskMedical.getId());
-            maskMedicalRepository.updateByKey(maskMedical.getId());
             maskList = maskMedicalRepository.findALl();
-            System.out.println("資料庫內之資料總共 = " + maskList.size()+ "筆");
-            maskMedicalRepository.deleteByKey(maskMedical.getId());
+           System.out.println("新增資料後，資料庫資料總共 = " + maskList.size() + "筆");
+            // updateByKey  更新日期
+            System.out.println("資料更新前 = "+ maskMedical);
+            maskMedicalRepository.updateDateByKey(maskMedical.getId(), updateDate);
+            MaskMedical maskRs = maskMedicalRepository.getById(maskMedical.getId());
+            System.out.println("資料更新後 = "+ maskRs);
+
+            //deleteByKey
+            maskMedicalRepository.deleteByKey(maskRs.getId());
+            System.out.println("已刪除資料 = " + maskRs);
             maskList = maskMedicalRepository.findALl();
-            System.out.println("資料庫內之刪除資料後總共 = " + maskList.size()+ "筆");
+            System.out.println("刪除資料後總共 = " + maskList.size()+ "筆");
 
     }
     public void LoadMedicalFile()  {
@@ -40,7 +53,7 @@ public class MaskMedicalService {
 
 
             // insert前先將資料清空
-            maskMedicalRepository.delete(conn);
+            maskMedicalRepository.deleteAll(conn);
 
             int count = 0;
             while ((lineData = fileInputStream.readLine()) != null) {
@@ -58,7 +71,6 @@ public class MaskMedicalService {
                 maskMedical.setKidscount(Integer.parseInt(data[5]));
                 maskMedical.setDate(data[6]);
 
-//            System.out.println(maskMedical);
                 // add to list
                 maskList.add(maskMedical);
 
@@ -68,7 +80,7 @@ public class MaskMedicalService {
             }
             System.out.println("資料庫內目前共有"+ maskMedicalRepository.count(conn)+"筆 健保特約機構");
             // close db connection
-//            conn.close();
+            conn.close();
             System.out.println("目前共有"+ maskList.size()+"筆 健保特約機構");
 
         } catch (Exception e) {
@@ -108,7 +120,10 @@ public class MaskMedicalService {
 //從資料庫讀出，再寫檔
 
         try ( Connection conn = maskMedicalRepository.getConnection()) {
-            List<MaskMedical> result = maskMedicalRepository.getByMedicalCode("233", conn);
+            System.out.print("請輸入醫事機構代碼 : ");
+            Scanner scanner = new Scanner(System.in);
+            var medicalcode = scanner.next();
+            List<MaskMedical> result = maskMedicalRepository.getByMedicalCode(medicalcode);
             for (int i = 0; i < result.size(); i++) {
                 if (i == 0){
                 bufferedWriter.write("來源資料時間" + ","+ "醫事機構代碼" + ","+ "醫事機構名稱"+ "," + "醫事機構地址"+ "," + "醫事機構電話"+ "," + "成人口罩剩餘數" + ","+ "兒童口罩剩餘數");
@@ -124,7 +139,7 @@ public class MaskMedicalService {
                 bufferedWriter.write(resultSet);
                 bufferedWriter.newLine();
             } {
-
+                System.out.println("所輸入之醫事機構代碼之查詢結果筆數共 " +result.size()+ "筆，" +" 輸出之檔案筆數共" + result.size() + "筆" );
 
         }
         bufferedWriter.close();
