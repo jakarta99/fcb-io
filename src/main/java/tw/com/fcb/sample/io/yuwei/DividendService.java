@@ -20,7 +20,7 @@ public class DividendService {
 		DividendRepository dividendRepository = new DividendRepository();
 		List<Dividend> dividendList = new ArrayList<Dividend>();
 		Dividend dividendData = setDividend();
-		
+		System.out.println("dividendData1:"+dividendData);
 		// 1.run findAll
 		dividendList = dividendRepository.findAll();
 		//2.List<Dividend> dividend.size = 0
@@ -32,6 +32,8 @@ public class DividendService {
 		
 		Dividend dividendInsertData; 
 		//4.getById(the Dividend.getId());
+		System.out.println("dividendData2:"+dividendData);
+		System.out.println("dividendData.getId()" + dividendData.getId());
 		dividendInsertData = dividendRepository.getById(dividendData.getId());
 		System.out.println(dividendInsertData);
 		//5.update cash_dividend
@@ -48,7 +50,6 @@ public class DividendService {
 	
     public Dividend setDividend(){
     	Dividend dividend = new Dividend();
-//    	dividend.setId((long)1);
 		dividend.setAllocationOfAnnual(111);
 		dividend.setCashDividend(2);
 		dividend.setStockDividend(2);
