@@ -4,8 +4,10 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class FinancialIndicatorsService {
 
@@ -42,4 +44,67 @@ public class FinancialIndicatorsService {
 		fr.close();
 		return result;
 	}
+
+	public void insert(List<FinancialIndicators> result) throws SQLException{
+		int count = new FinancialIndicatorsRepository().insert(result);
+		System.out.println("目前已寫入 " + count + "筆資料");
+	}
+
+	public void findAll() throws SQLException{
+		List<FinancialIndicators> allFinancialIndicator = new FinancialIndicatorsRepository().findAll();
+		System.out.println(allFinancialIndicator);
+	}
+
+	public void getById() throws SQLException{
+		System.out.print("輸入年份：");
+		Scanner scannerById = new Scanner(System.in);
+		int optionById = scannerById.nextInt();
+		FinancialIndicators FinancialIndicator = new FinancialIndicatorsRepository().getById(optionById);
+		System.out.println(FinancialIndicator);
+		scannerById.close();
+	}
+
+	public void update() throws SQLException{
+		FinancialIndicators financialIndicator = new FinancialIndicators();
+		
+		System.out.print("輸入年份：");
+		Scanner scannerById = new Scanner(System.in);
+		financialIndicator.setYear(scannerById.nextInt());
+		
+		System.out.print("輸入匯率：");
+		Scanner scannerRate = new Scanner(System.in);
+		financialIndicator.setExchangeRate(new BigDecimal(scannerRate.nextBigInteger()));
+		
+		System.out.print("輸入外匯存底：");
+		Scanner scannerForeign = new Scanner(System.in);
+		financialIndicator.setForeign(new BigDecimal(scannerForeign.nextBigInteger()));
+		
+		System.out.print("輸入證券發行量加權股價指數：");
+		Scanner scannerStockIndex = new Scanner(System.in);
+		financialIndicator.setStockIndex(new BigDecimal(scannerStockIndex.nextBigInteger()));
+		
+		System.out.print("輸入證券成交值：");
+		Scanner scannerStockAmount = new Scanner(System.in);
+		financialIndicator.setStockAmount(new BigDecimal(scannerStockAmount.nextBigInteger()));
+		
+		int count = new FinancialIndicatorsRepository().update(financialIndicator);
+		System.out.println("更新" +count+ "筆完成");
+		
+		scannerById.close();
+		scannerRate.close();
+		scannerForeign.close();
+		scannerStockIndex.close();
+		scannerStockAmount.close();
+	}
+
+	public void delete() throws SQLException{
+		System.out.print("輸入年份：");
+		Scanner scannerById = new Scanner(System.in);
+		int optionById = scannerById.nextInt();
+		int count = new FinancialIndicatorsRepository().delete(optionById);
+		System.out.println("刪除" + count + "筆成功");
+		scannerById.close();
+	}
+
+	
 }
