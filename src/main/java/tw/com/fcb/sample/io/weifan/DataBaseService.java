@@ -26,8 +26,8 @@ public class DataBaseService {
 		ResultSet resultSet = null;
 		List<Language> list = null;
 		
-		String selectSql = "SELECT * FROM language";
-		pStatement = connection.prepareStatement(selectSql);
+		String SqlCmd = "SELECT * FROM language";
+		pStatement = connection.prepareStatement(SqlCmd);
 		resultSet = pStatement.executeQuery();
 		
 		list = new ArrayList<Language>();
@@ -48,13 +48,17 @@ public class DataBaseService {
 	}
 	public Language findByID(int ID) throws Exception {
 		Language Lan = new Language();
-		Connection connection = ConnectDB();
 		PreparedStatement pStatement = null;
 		ResultSet resultSet = null;
-		String selectSql = "SELECT * FROM language where seq = " + ID;
-		pStatement = connection.prepareStatement(selectSql);
+		
+		Connection connection = ConnectDB();
+		
+		String SqlCmd = "SELECT * FROM language where seq = ? ";
+		pStatement = connection.prepareStatement(SqlCmd);
+		pStatement.setInt(1, ID);
 		resultSet = pStatement.executeQuery();
-		resultSet.next();
+		
+		if(resultSet.next()) {
 		Lan.setSeq(Integer.valueOf(resultSet.getString("seq")));
 		Lan.setCreateDate(resultSet.getString("createdate"));
 		Lan.setYear(resultSet.getString("year"));
@@ -63,10 +67,54 @@ public class DataBaseService {
 		Lan.setSignNum(resultSet.getString("signnum"));
 		Lan.setJoinNum(resultSet.getString("joinnum"));
 		Lan.setPassNum(resultSet.getString("passnum"));
-		
+		}
 		return Lan;
 	}
-	
+	public void Insert(Language Lan) throws Exception{
+		PreparedStatement pStatement = null;
+		Connection connection = ConnectDB();
+
+		String SqlCmd = "INSERT INTO language VALUES(?,?,?,?,?,?,?,?)";
+		pStatement = connection.prepareStatement(SqlCmd);
+		pStatement.setInt(1,Lan.getSeq());
+		pStatement.setString(2,Lan.getCreateDate());
+		pStatement.setString(3,Lan.getYear());
+		pStatement.setString(4,Lan.getChineseName());
+		pStatement.setString(5,Lan.getLevel());
+		pStatement.setString(6,Lan.getSignNum());
+		pStatement.setString(7,Lan.getJoinNum());
+		pStatement.setString(8,Lan.getPassNum());
+		pStatement.executeUpdate();
+		pStatement.clearParameters();
+	}
+	public void Update(Language Lan) throws Exception{
+		PreparedStatement pStatement = null;
+		Connection connection = ConnectDB();
+
+		String SqlCmd = "UPDATE language SET createdate = ?, year = ?, chinesename =?, level = ?, signnum = ?, joinnum = ?, passnum = ? WHERE seq = ?";
+		pStatement = connection.prepareStatement(SqlCmd);
+		pStatement.setInt(8,Lan.getSeq());
+		pStatement.setString(1,Lan.getCreateDate());
+		pStatement.setString(2,Lan.getYear());
+		pStatement.setString(3,Lan.getChineseName());
+		pStatement.setString(4,Lan.getLevel());
+		pStatement.setString(5,Lan.getSignNum());
+		pStatement.setString(6,Lan.getJoinNum());
+		pStatement.setString(7,Lan.getPassNum());
+		pStatement.executeUpdate();
+		pStatement.clearParameters();
+	}
+	public void Delete(int ID) throws Exception{
+		PreparedStatement pStatement = null;
+		Connection connection = ConnectDB();
+
+		String SqlCmd = "DELETE FROM language WHERE seq = ?";
+		pStatement = connection.prepareStatement(SqlCmd);
+		pStatement.setInt(1,ID);
+
+		pStatement.executeUpdate();
+		pStatement.clearParameters();
+	}
 	public void CloseDB(Statement stmt) throws SQLException{
 		stmt.close();
 	}

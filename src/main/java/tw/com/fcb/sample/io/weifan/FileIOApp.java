@@ -40,6 +40,33 @@ public class FileIOApp {
 			e.printStackTrace();
 		}
 		System.out.println(Lan.toString());
+		
+		//Insert
+		Lan.setSeq(999);
+		try {
+			DB.Insert(Lan);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//Update
+		Lan.setChineseName("胡言亂語");
+		Lan.setLevel("超低級");
+		try {
+			DB.Update(Lan);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//Delete
+		try {
+			DB.Delete(999);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	/*	try {
 			DataBaseService DB = new DataBaseService();
 		//	Statement stmt = DB.ConnectDB();
