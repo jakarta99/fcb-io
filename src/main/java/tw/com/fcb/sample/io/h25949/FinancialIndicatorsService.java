@@ -42,6 +42,7 @@ public class FinancialIndicatorsService {
 		}
 		
 		fr.close();
+		bfr.close();
 		return result;
 	}
 

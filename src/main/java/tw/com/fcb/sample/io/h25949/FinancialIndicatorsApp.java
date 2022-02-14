@@ -2,12 +2,13 @@ package tw.com.fcb.sample.io.h25949;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
 public class FinancialIndicatorsApp {
 	public static void main(String[] args) {
-
+		System.out.println("1.匯入每年國內主要金融指標檔案，2.顯示每年國內主要金融指標，3.選擇年份顯示國內主要金融指標，4.選擇年份更新國內主要金融指標，5.選擇年份刪除資料");
 		System.out.print("輸入選項：");
 		Scanner scanner = new Scanner(System.in);
 		int option = scanner.nextInt();
@@ -42,14 +43,18 @@ public class FinancialIndicatorsApp {
 				break;
 				
 			default:
-				 System.out.println("選項有誤");
+				 System.out.println("輸入選項有誤");
 			}
 
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
 			System.out.println("找不到檔案");
 		} catch (IOException e) {
-			System.out.println("檔案已毀損");
 			e.printStackTrace();
+			System.out.println("檔案已毀損");
+		} catch(SQLException e) {
+			e.printStackTrace();
+			System.out.println("資料庫連線有誤");
 		} catch (Exception e) {
 			e.printStackTrace();
 		} 

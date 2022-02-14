@@ -5,11 +5,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-
-import tw.com.fcb.sample.io.gary.Fruit;
 
 public class FinancialIndicatorsRepository {
 
@@ -24,32 +21,30 @@ public class FinancialIndicatorsRepository {
 	public int insert(List<FinancialIndicators> result) throws SQLException {
 
 		Connection conn = getConnection();
-		Statement stmt = conn.createStatement();
 		int count=0;
 		
 		for (FinancialIndicators FinancialIndicator : result) {
-			String SQL = "INSERT INTO fruit values (" + "'" + FinancialIndicator.getYear() + "', " + "'"
-					+ FinancialIndicator.getExchangeRate() + "', " + "'" + FinancialIndicator.getForeign() + "', " + "'"
-					+ FinancialIndicator.getStockIndex() + "', " + "" + FinancialIndicator.getStockAmount() + "" + ")";
-			// String SQL = "insert into
-			// fruit(the_year,exchange_rate,the_foreign,stock_index,stock_amount)
-			// values(2001,28.508,5299.11,14732.53,491825)";
-			count = count + stmt.executeUpdate(SQL);
+			String SQL="insert into fruit(the_year,exchange_rate,the_foreign,stock_index,stock_amount) values(?,?,?,?,?)";
+			PreparedStatement ps= conn.prepareStatement(SQL);
+			
+			ps.setInt(1,FinancialIndicator.getYear());
+			ps.setBigDecimal(2,FinancialIndicator.getExchangeRate());
+			ps.setBigDecimal(3,FinancialIndicator.getForeign());
+			ps.setBigDecimal(4,FinancialIndicator.getStockIndex());
+			ps.setBigDecimal(5,FinancialIndicator.getStockAmount());
+			
+			count = count + ps.executeUpdate();;
 		}
-		
-		stmt.close();
 		return count;
 	}
 	
 	public List<FinancialIndicators> findAll() throws SQLException{
-		Connection conn = getConnection();
-		Statement stmt = conn.createStatement();
-		
+		Connection conn = getConnection();	
 		String sqlCmd = "select * from fruit";
-		ResultSet rs = stmt.executeQuery(sqlCmd);
+		PreparedStatement ps= conn.prepareStatement(sqlCmd);
+		ResultSet rs = ps.executeQuery();
 		
 		List<FinancialIndicators> FinancialIndicators = new ArrayList<FinancialIndicators>();
-
 		FinancialIndicators FinancialIndicator;
 		while(rs.next()) {
 			FinancialIndicator = new FinancialIndicators();
@@ -66,10 +61,11 @@ public class FinancialIndicatorsRepository {
 
 	public FinancialIndicators getById(int optionById) throws SQLException {
 		Connection conn = getConnection();
-		Statement stmt = conn.createStatement();
-
-		String sqlCmd = "select * from fruit where the_year = '" + optionById + "'";
-		ResultSet rs = stmt.executeQuery(sqlCmd);
+		String sqlCmd = "select * from fruit where the_year = ?";
+		PreparedStatement ps= conn.prepareStatement(sqlCmd);
+		
+		ps.setInt(1,optionById);
+		ResultSet rs = ps.executeQuery();
 
 		FinancialIndicators FinancialIndicator = new FinancialIndicators();
 		while (rs.next()) {
