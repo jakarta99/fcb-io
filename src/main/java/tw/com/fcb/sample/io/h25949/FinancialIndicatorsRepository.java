@@ -53,7 +53,7 @@ public class FinancialIndicatorsRepository {
 		FinancialIndicators FinancialIndicator;
 		while(rs.next()) {
 			FinancialIndicator = new FinancialIndicators();
-			FinancialIndicator.setYear(rs.getInt("the_yaer"));
+			FinancialIndicator.setYear(rs.getInt("the_year"));
 			FinancialIndicator.setExchangeRate(rs.getBigDecimal("exchange_rate"));
 			FinancialIndicator.setForeign(rs.getBigDecimal("the_foreign"));
 			FinancialIndicator.setStockIndex(rs.getBigDecimal("stock_index"));
@@ -73,7 +73,7 @@ public class FinancialIndicatorsRepository {
 
 		FinancialIndicators FinancialIndicator = new FinancialIndicators();
 		while (rs.next()) {
-			FinancialIndicator.setYear(rs.getInt("the_yaer"));
+			FinancialIndicator.setYear(rs.getInt("the_year"));
 			FinancialIndicator.setExchangeRate(rs.getBigDecimal("exchange_rate"));
 			FinancialIndicator.setForeign(rs.getBigDecimal("the_foreign"));
 			FinancialIndicator.setStockIndex(rs.getBigDecimal("stock_index"));

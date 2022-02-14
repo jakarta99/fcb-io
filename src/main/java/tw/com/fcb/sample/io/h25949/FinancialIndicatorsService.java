@@ -51,8 +51,11 @@ public class FinancialIndicatorsService {
 	}
 
 	public void findAll() throws SQLException{
-		List<FinancialIndicators> allFinancialIndicator = new FinancialIndicatorsRepository().findAll();
-		System.out.println(allFinancialIndicator);
+		List<FinancialIndicators> allFinancialIndicators = new FinancialIndicatorsRepository().findAll();
+		
+		for (FinancialIndicators allFinancialIndicator :allFinancialIndicators) {
+			System.out.println(allFinancialIndicator);
+		}
 	}
 
 	public void getById() throws SQLException{
