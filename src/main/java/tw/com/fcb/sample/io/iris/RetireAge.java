@@ -1,7 +1,8 @@
 package tw.com.fcb.sample.io.iris;
 
 public class RetireAge {
-	 private String type;
+		private Long id;
+		private String type;
 	    private int voluntary_cnt;
 	    private int age_cnt;
 	    private int order_cnt;
@@ -9,11 +10,20 @@ public class RetireAge {
 	    @Override
 	    public String toString() {
 	        return "RetireAge{" +
-	                "type='" + type + '\'' +
+	                "id=" + id +
+	                ", type='" + type + '\'' +
 	                ", voluntary_cnt=" + voluntary_cnt +
 	                ", age_cnt=" + age_cnt +
 	                ", order_cnt=" + order_cnt +
 	                '}';
+	    }
+
+	    public Long getId() {
+	        return id;
+	    }
+
+	    public void setId(Long id) {
+	        this.id = id;
 	    }
 
 	    public String getType() {

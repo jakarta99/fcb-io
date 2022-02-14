@@ -1,6 +1,7 @@
 package tw.com.fcb.sample.io.iris;
 
 import java.io.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,5 +41,38 @@ public class RetireAgeService {
         br.close();
         return result;
     }
+	
+//	   2022/02/11 homework
+	public void runCrud() throws SQLException {
+		// run findAll
+		RetireRepository rey = new RetireRepository();
+		List<RetireAge> retires = rey.findAll();
+		for (RetireAge inx : retires) {
+			System.out.println(inx);
+			}
+		
+		// List<Fruit> fruits.size = 0
+		System.out.println("資料筆數共 = " + retires.size() + "筆");
+		
+		// insert
+		RetireAge retObj = new RetireAge();
+		retObj.setType("test");
+		retObj.setVoluntary_cnt(0);
+		retObj.setAge_cnt(0);
+		retObj.setOrder_cnt(0);
+		rey.inserDB(retObj);
+		retires = rey.findAll();
+		System.out.println("新增後資料內容 = " + rey.getByType("test"));
+		System.out.println("新增後資料筆數 = " + retires.size() + "筆");
+		
+		// update price
+		rey.updateDB(Long.valueOf(4),5);
+		
+		// delete fruit by id
+		rey.deleteDB("test");
+		retires = rey.findAll();
+		System.out.println("刪除後資料筆數 = " + retires.size() + "筆");
+		
+	}
 
 }

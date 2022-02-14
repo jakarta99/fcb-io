@@ -20,14 +20,24 @@ public class RetireApp {
 
             List<RetireAge> result = new RetireAgeService().loadFromFile();
             System.out.println("目前已經有 "+result.size()+"筆資料");
+         
+//     	   2022/02/11 homework run
+            RetireAgeService reSe = new RetireAgeService();
+            reSe.runCrud();
+            System.out.println("***end****");
             
-//***       將上述檔案內容寫入資料庫
-            RetireRepository rey = new RetireRepository();
-            for(RetireAge inx : result) {
-            	rey.inserDB(inx);
-            }
-            System.out.println("已成功寫入testdb資料庫");
-            
+//          RetireRepository rey = new RetireRepository();
+//***      查詢資料    
+//          List<RetireAge> retires = rey.findAll();
+//          for (RetireAge inx : retires) {
+//          	 System.out.println("test= " + inx);
+//          }
+//***       將上述檔案內容寫入資料庫            
+//            for(RetireAge inx : result) {
+//            	rey.inserDB(inx);
+//            }
+//            System.out.println("已成功寫入testdb資料庫");
+//            System.out.println(rey.getByType("女"));
 //***       依TYPE刪除資料庫內資料
 //            for(RetireAge inx : result) {
 //            	rey.deleteDB(inx.getType());
@@ -59,6 +69,8 @@ public class RetireApp {
                 e.printStackTrace();
             }
         }
+        System.out.println();
+        System.out.println();
 	}
 
 }
