@@ -55,6 +55,7 @@ public class DividendRepository {
 		Dividend dividend;
 		while(rs.next()) {
 			dividend = new Dividend();
+			dividend.setId(rs.getLong("id"));
 			dividend.setAllocationOfAnnual(rs.getInt("allocation_of_annual"));
 			dividend.setCashDividend(rs.getDouble("cash_dividend"));
 			dividend.setStockDividend(rs.getDouble("stock_dividend"));
@@ -108,7 +109,8 @@ public class DividendRepository {
 //				+"'"+dividend.getIssuingCompany()+"')";
 //		stmt.executeUpdate(sqlCmd);
 		
-		String sqlCmd = "INSERT INTO dividend values (?, ?, ?, ?, ?, ?, ?)";
+		String sqlCmd = "INSERT INTO dividend (allocation_of_annual,cash_dividend,stock_dividend,total,total_cash_dividend_Unit,shareholding_ratio,issuing_company)"
+				+ "values (?, ?, ?, ?, ?, ?, ?) returning id ";
 		PreparedStatement stmt = conn.prepareStatement(sqlCmd);
 		stmt.setInt(1, dividend.getAllocationOfAnnual());
 		stmt.setDouble(2, dividend.getCashDividend());
@@ -117,8 +119,14 @@ public class DividendRepository {
 		stmt.setDouble(5, dividend.getTotalCashDividendUnit());
 		stmt.setDouble(6, dividend.getShareholdingRatio());
 		stmt.setString(7, dividend.getIssuingCompany());
-		System.out.println("sqlCmd Insert "+sqlCmd);
-		stmt.executeUpdate();
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			int id = rs.getInt("id");
+			dividend.setId(Long.valueOf(id));
+		} else {
+			// do something if can't 
+			 System.out.println("insert not success");
+		}
 		stmt.clearParameters();
 		stmt.close();
 		return -1;
