@@ -65,17 +65,29 @@ public class RetireRepository {
 //	        										  + obj.getVoluntary_cnt() +","
 //	        										  + obj.getAge_cnt() +","
 //	        										  + obj.getOrder_cnt() + ")";
-	        String sqlCmd = "INSERT INTO retireID(obj.getType,getVoluntary_cnt,getAge_cnt,getOrder_cnt)" +
-                            "VALUES(?,?,?,?,?,?,?) returning id";
+	        String sqlCmd = "INSERT INTO retireID(Type,Voluntary_cnt,Age_cnt,Order_cnt)" +
+                            "VALUES(?,?,?,?) returning id";
 	        PreparedStatement  stmt = conn.prepareStatement(sqlCmd);
 	        stmt.setString(1,obj.getType());
 	        stmt.setInt(2,obj.getVoluntary_cnt() );
 	        stmt.setInt(3,obj.getAge_cnt());
 	        stmt.setInt(4,obj.getOrder_cnt());
-	        stmt.executeUpdate(sqlCmd);
-	        
-	        stmt.close();
-	        conn.close();
+//	        ~~????~~executeUpdate --> 在 PreparedStatement 上不能使用獲取查詢字串的查詢方法。
+//	        id顯示null~
+	        ResultSet rs = stmt.executeQuery();
+			if(rs.next()) {
+				int id = rs.getInt("id");
+				obj.setId(Long.valueOf(id));
+			} else {
+				// do something if can't 
+				 System.out.println("insert not success");
+			}
+			stmt.clearParameters();
+			stmt.close();
+//	        stmt.executeUpdate(sqlCmd);
+//	        
+//	        stmt.close();
+//	        conn.close();
 	    }
 	 
 	 public void updateDB(Long id, int voluntary_cnt) throws SQLException {
