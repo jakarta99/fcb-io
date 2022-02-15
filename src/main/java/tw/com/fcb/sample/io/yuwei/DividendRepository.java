@@ -111,15 +111,15 @@ public class DividendRepository {
 		
 		String sqlCmd = "INSERT INTO dividend (allocation_of_annual,cash_dividend,stock_dividend,total,total_cash_dividend_Unit,shareholding_ratio,issuing_company)"
 				+ "values (?, ?, ?, ?, ?, ?, ?) returning id ";
-		PreparedStatement stmt = conn.prepareStatement(sqlCmd);
-		stmt.setInt(1, dividend.getAllocationOfAnnual());
-		stmt.setDouble(2, dividend.getCashDividend());
-		stmt.setDouble(3, dividend.getStockDividend());
-		stmt.setDouble(4, dividend.getTotal());
-		stmt.setDouble(5, dividend.getTotalCashDividendUnit());
-		stmt.setDouble(6, dividend.getShareholdingRatio());
-		stmt.setString(7, dividend.getIssuingCompany());
-		ResultSet rs = stmt.executeQuery();
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
+		pstmt.setInt(1, dividend.getAllocationOfAnnual());
+		pstmt.setDouble(2, dividend.getCashDividend());
+		pstmt.setDouble(3, dividend.getStockDividend());
+		pstmt.setDouble(4, dividend.getTotal());
+		pstmt.setDouble(5, dividend.getTotalCashDividendUnit());
+		pstmt.setDouble(6, dividend.getShareholdingRatio());
+		pstmt.setString(7, dividend.getIssuingCompany());
+		ResultSet rs = pstmt.executeQuery();
 		if(rs.next()) {
 			int id = rs.getInt("id");
 			dividend.setId(Long.valueOf(id));
@@ -127,24 +127,25 @@ public class DividendRepository {
 			// do something if can't 
 			 System.out.println("insert not success");
 		}
-		stmt.clearParameters();
-		stmt.close();
+		pstmt.clearParameters();
+		pstmt.close();
 		return -1;
 	}
 	
 	public void insertData(Dividend dividend) throws SQLException {
 		Connection conn = getConnection();
 		String sqlCmd = "INSERT INTO dividend (allocation_of_annual,cash_dividend,stock_dividend,total,total_cash_dividend_Unit,shareholding_ratio,issuing_company)"
-				+ "values (?, ?, ?, ?, ?, ?, ?) returning id ";
-		PreparedStatement stmt = conn.prepareStatement(sqlCmd);
-		stmt.setInt(1, dividend.getAllocationOfAnnual());
-		stmt.setDouble(2, dividend.getCashDividend());
-		stmt.setDouble(3, dividend.getStockDividend());
-		stmt.setDouble(4, dividend.getTotal());
-		stmt.setDouble(5, dividend.getTotalCashDividendUnit());
-		stmt.setDouble(6, dividend.getShareholdingRatio());
-		stmt.setString(7, dividend.getIssuingCompany());
-		ResultSet rs = stmt.executeQuery();
+				+ "values (?, ?, ?, ?, ?, ?, ?)";
+		PreparedStatement pstmt = conn.prepareStatement(sqlCmd,Statement.RETURN_GENERATED_KEYS);
+		pstmt.setInt(1, dividend.getAllocationOfAnnual());
+		pstmt.setDouble(2, dividend.getCashDividend());
+		pstmt.setDouble(3, dividend.getStockDividend());
+		pstmt.setDouble(4, dividend.getTotal());
+		pstmt.setDouble(5, dividend.getTotalCashDividendUnit());
+		pstmt.setDouble(6, dividend.getShareholdingRatio());
+		pstmt.setString(7, dividend.getIssuingCompany());
+		pstmt.executeUpdate();
+		ResultSet rs = pstmt.getGeneratedKeys();
 		if(rs.next()) {
 			int id = rs.getInt("id");
 			dividend.setId(Long.valueOf(id));
@@ -152,7 +153,7 @@ public class DividendRepository {
 			// do something if can't 
 			 System.out.println("insert not success");
 		}
-		stmt.close();
+		pstmt.close();
 		conn.close();
 		
 	}
