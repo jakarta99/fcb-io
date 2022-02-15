@@ -51,6 +51,8 @@ public class FileRepository {
 			fileSecurities.setEtfCode(resultSet.getString("etfcode"));
 			fileSecurities.setEtfName(resultSet.getString("etfname"));
 			fileSecurities.setEtfTransaction(resultSet.getString("etftransaction"));
+			fileSecurities.setCurrencyEnum(FileCurrencyEnum.valueOf(resultSet.getString("curr_code")));
+
 			list.add(fileSecurities);
 		}
 		
@@ -79,6 +81,8 @@ public class FileRepository {
 			fileSecurities.setEtfCode(resultSet.getString("etfcode"));
 			fileSecurities.setEtfName(resultSet.getString("etfname"));
 			fileSecurities.setEtfTransaction(resultSet.getString("etftransaction"));
+			fileSecurities.setCurrencyEnum(FileCurrencyEnum.valueOf(resultSet.getString("curr_code")));
+			
 			list.add(fileSecurities);
 		}
 		
@@ -108,6 +112,8 @@ public class FileRepository {
 			fileSecurities.setEtfCode(resultSet.getString("etfcode"));
 			fileSecurities.setEtfName(resultSet.getString("etfname"));
 			fileSecurities.setEtfTransaction(resultSet.getString("etftransaction"));
+			fileSecurities.setCurrencyEnum(FileCurrencyEnum.valueOf(resultSet.getString("curr_code")));
+			
 			list.add(fileSecurities);
 		}
 		
@@ -137,6 +143,8 @@ public class FileRepository {
 			fileSecurities.setEtfCode(resultSet.getString("etfcode"));
 			fileSecurities.setEtfName(resultSet.getString("etfname"));
 			fileSecurities.setEtfTransaction(resultSet.getString("etftransaction"));
+			fileSecurities.setCurrencyEnum(FileCurrencyEnum.valueOf(resultSet.getString("curr_code")));
+			
 			list.add(fileSecurities);
 		}
 		else {
@@ -152,8 +160,14 @@ public class FileRepository {
 		PreparedStatement pStatement = null;
 
 		connection = getConnection();
-			
-		String insertSql = "INSERT INTO stock VALUES(?, ?, ?, ?, ?, ?, ?)";
+		
+		//方法一
+		//CREATE type curr_enum as enum('USD', 'EUR', 'JPY', 'ZAR', 'TWD');
+		//因為DB有設定ENUM型態，所以在傳值時需指定::curr_enum
+		//String insertSql = "INSERT INTO stock VALUES(?, ?, ?, ?, ?, ?, ?, ?::curr_enum)";
+		//pStatement.setString(8, fileSecurities.getCurrencyEnum().name());
+		
+		String insertSql = "INSERT INTO stock VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 		pStatement = connection.prepareStatement(insertSql);
 		pStatement.setString(1, fileSecurities.getSecuritiesOrder());
 		pStatement.setString(2, fileSecurities.getStockCode());
@@ -162,6 +176,7 @@ public class FileRepository {
 		pStatement.setString(5, fileSecurities.getEtfCode());
 		pStatement.setString(6, fileSecurities.getEtfName());
 		pStatement.setString(7, fileSecurities.getEtfTransaction());
+		pStatement.setObject(8, fileSecurities.getCurrencyEnum(), java.sql.Types.OTHER);
 		pStatement.executeUpdate();
 		pStatement.clearParameters();
 	}
