@@ -2,21 +2,32 @@ package tw.com.fcb.sample.io.cj;
 
 public class VehicleSharing {
 
+    private int id;
     private int year;
+
+    @Override
+    public String toString() {
+        return "VehicleSharing{" +
+                "id=" + id +
+                ", year=" + year +
+                ", month=" + month +
+                ", brand='" + brand + '\'' +
+                ", type=" + type +
+                ", amount=" + amount +
+                '}';
+    }
+
     private int month;
     private String brand;
     private int type;
     private int amount;
 
-    @Override
-    public String toString() {
-        return "VehicleSharing{" +
-                "year=" + year +
-                ", month=" + month +
-                ", brand='" + brand + '\'' +
-                ", type='" + type + '\'' +
-                ", amount=" + amount +
-                '}';
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getYear() {

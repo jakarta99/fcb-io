@@ -16,10 +16,10 @@ public class RetireApp {
             while( (i = fr.read()) != -1) {
                 System.out.print((char) i);
             }
-            System.out.print("\n");
-
             List<RetireAge> result = new RetireAgeService().loadFromFile();
             System.out.println("目前已經有 "+result.size()+"筆資料");
+            System.out.print("\n");
+
          
 //     	   2022/02/11 homework run
             RetireAgeService reSe = new RetireAgeService();
