@@ -1,5 +1,12 @@
 package tw.com.fcb.sample.io.weifan;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@ToString
+@Getter
+@Setter
 public class Language {
 
 	private int Seq;
@@ -10,64 +17,13 @@ public class Language {
 	private String SignNum;
 	private String JoinNum;
 	private String PassNum;
-	@Override
-	public String toString() {
-		return "Language [Seq=" + Seq + ", CreateDate=" + CreateDate + ", year=" + year + ", ChineseName=" + ChineseName
-				+ ", Level=" + Level + ", SignNum=" + SignNum + ", JoinNum=" + JoinNum + ", PassNum=" + PassNum + "]";
-	}
+
 	public String toSqlcmd() {
 		return "insert into language values(" + Seq + ",'" + CreateDate + "', '" + year + "', '" + ChineseName
 				+ "','" + Level + "', '" + SignNum + "', '" + JoinNum + "', '" + PassNum + "');";
 	}
 	
-	public int getSeq() {
-		return Seq;
-	}
-	public void setSeq(int seq) {
-		Seq = seq;
-	}
-	public String getCreateDate() {
-		return CreateDate;
-	}
-	public void setCreateDate(String createDate) {
-		CreateDate = createDate;
-	}
-	public String getYear() {
-		return year;
-	}
-	public void setYear(String year) {
-		this.year = year;
-	}
-	public String getChineseName() {
-		return ChineseName;
-	}
-	public void setChineseName(String chineseName) {
-		ChineseName = chineseName;
-	}
-	public String getLevel() {
-		return Level;
-	}
-	public void setLevel(String level) {
-		Level = level;
-	}
-	public String getSignNum() {
-		return SignNum;
-	}
-	public void setSignNum(String signNum) {
-		SignNum = signNum;
-	}
-	public String getJoinNum() {
-		return JoinNum;
-	}
-	public void setJoinNum(String joinNum) {
-		JoinNum = joinNum;
-	}
-	public String getPassNum() {
-		return PassNum;
-	}
-	public void setPassNum(String passNum) {
-		PassNum = passNum;
-	}
+	
 
 	
 }
