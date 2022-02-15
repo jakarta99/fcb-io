@@ -1,17 +1,39 @@
 package tw.com.fcb.sample.io.jilldolala25;
 
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MaskMedicalRepository {
+    HikariDataSource ds;
+    public  MaskMedicalRepository() {
+        LocalDateTime startTime = LocalDateTime.now();
+
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:postgresql://localhost:5432/testdb");
+        config.setUsername("postgres");
+        config.setPassword("postgres");
+        config.addDataSourceProperty("minimumIdle", "10");
+        config.addDataSourceProperty("maximumPoolSize", "30");
+        LocalDateTime endTime = LocalDateTime.now();
+        Long diff= ChronoUnit.MILLIS.between(startTime,endTime);
+        System.out.println("total " + diff + "mesc");
+        this.ds = new HikariDataSource(config);
+
+    }
 
     public Connection getConnection() throws SQLException {
-        String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
-        String username = "postgres";
-        String password = "postgres";
-        return DriverManager.getConnection(dbUrl,username,password);
+        return ds.getConnection();
+//        String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
+//        String username = "postgres";
+//        String password = "postgres";
+//        return DriverManager.getConnection(dbUrl,username,password);
 
     }
 
@@ -37,6 +59,7 @@ public class MaskMedicalRepository {
             maskMedical.setAldultcount(rs.getInt("aldult_count"));
             maskMedical.setKidscount(rs.getInt("kids_count"));
             maskMedical.setDate(rs.getString("update_date"));
+            maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type")));
 
             maskMedicals.add(maskMedical);
 
@@ -51,8 +74,8 @@ public class MaskMedicalRepository {
 
         Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement
-                ("INSERT INTO maskmedical(medical_code,medical_name,medical_address,medical_phone,aldult_count,kids_count,update_date)" +
-                        "VALUES(?,?,?,?,?,?,?) returning id");
+                ("INSERT INTO maskmedical(medical_code,medical_name,medical_address,medical_phone,aldult_count,kids_count,update_date,medical_type)" +
+                        "VALUES(?,?,?,?,?,?,?,?) returning id");
         stmt.setString(1,maskMedical.getMedicalcode());
         stmt.setString(2, maskMedical.getMedicalname());
         stmt.setString(3, maskMedical.getMedicaladdress());
@@ -60,6 +83,7 @@ public class MaskMedicalRepository {
         stmt.setInt(5,maskMedical.getAldultcount());
         stmt.setInt(6,maskMedical.getKidscount());
         stmt.setString(7, maskMedical.getDate());
+        stmt.setString(8, String.valueOf(maskMedical.getMaskMedicalEnum()));
 
 
         ResultSet rs = stmt.executeQuery();
@@ -91,6 +115,7 @@ public class MaskMedicalRepository {
             maskMedical.setAldultcount(rs.getInt("aldult_count"));
             maskMedical.setKidscount(rs.getInt("kids_count"));
             maskMedical.setDate(rs.getString("update_date"));
+            maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type")));
         }
         rs.close();
         stmt.close();
@@ -161,6 +186,7 @@ public class MaskMedicalRepository {
             maskMedical.setAldultcount(rs.getInt("aldult_count"));
             maskMedical.setKidscount(rs.getInt("kids_count"));
             maskMedical.setDate(rs.getString("update_date"));
+            maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type")));
             resultSet.add(maskMedical);
         }
         rs.close();
@@ -171,8 +197,8 @@ public class MaskMedicalRepository {
 
     public void insert(MaskMedical maskMedical, Connection conn) throws SQLException {
 
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO maskmedical (medical_code,medical_name,medical_address,medical_phone,aldult_count,kids_count,update_date)" +
-                "VALUES (?,?,?,?,?,?,?)");
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO maskmedical (medical_code,medical_name,medical_address,medical_phone,aldult_count,kids_count,update_date,medical_type)" +
+                "VALUES (?,?,?,?,?,?,?,?)");
         stmt.setString(1,maskMedical.getMedicalcode());
         stmt.setString(2,maskMedical.getMedicalname());
         stmt.setString(3,maskMedical.getMedicaladdress());
@@ -180,9 +206,38 @@ public class MaskMedicalRepository {
         stmt.setInt(5,maskMedical.getAldultcount());
         stmt.setInt(6,maskMedical.getKidscount());
         stmt.setString(7, maskMedical.getDate());
+        stmt.setString(8, String.valueOf(maskMedical.getMaskMedicalEnum()));
         stmt.executeUpdate();
         stmt.clearParameters();
     }
 
 
+    public void getBySpecifyMedicalCode(String medicalcode) throws SQLException {
+        Connection conn = getConnection();
+        String sqlCmd = "select * from maskmedical where medical_code = ?";
+        PreparedStatement ptmt = conn.prepareStatement(sqlCmd);
+        ptmt.setString(1,medicalcode);
+        ResultSet rs = ptmt.executeQuery();
+
+        if (rs.next()){
+            MaskMedicalEnum maskMedicalEnum = MaskMedicalEnum.CHAIN;
+            maskMedicalEnum.valueOf(rs.getString(9));
+            System.out.println("MaskMedicalEnum = " + maskMedicalEnum);
+            switch (maskMedicalEnum){
+                case PRESCRIPTION:
+                    System.out.println("您查詢之醫事機構為「處方箋藥局」");
+                    break;
+                case HEATCH:
+                    System.out.println("您查詢之醫事機構為「健保藥局」");
+                    break;
+                case CHAIN:
+                    System.out.println("您查詢之醫事機構為「連鎖藥局」");
+                    break;
+                case COMPLEX:
+                    System.out.println("您查詢之醫事機構為「綜合藥局」");
+                    break;
+            }
+        }
+
+    }
 }
