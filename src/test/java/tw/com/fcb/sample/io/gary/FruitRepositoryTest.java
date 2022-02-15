@@ -1,11 +1,8 @@
 package tw.com.fcb.sample.io.gary;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -13,10 +10,8 @@ class FruitRepositoryTest {
 
 	@Test
 	void testInsert() {
-		Fruit fruit = new Fruit();
-		fruit.setCode("A");
-		fruit.setName("Apple");
-		fruit.setPrice(100);
+		Fruit fruit = Fruit.builder().code("A").name("Apple").price(100).build();
+		
 		
 		FruitRepository fruitRepository = new FruitRepository();
 		try {

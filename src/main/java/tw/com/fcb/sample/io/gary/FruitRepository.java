@@ -59,10 +59,13 @@ public class FruitRepository {
 
 		Fruit fruit;
 		while(rs.next()) {
-			fruit = new Fruit();
-			fruit.setCode(rs.getString("code"));
-			fruit.setName(rs.getString("name"));
-			fruit.setPrice(rs.getInt("price"));
+			fruit = Fruit.builder()
+					.code(rs.getString("code"))
+					.name(rs.getString("name"))
+					.price(rs.getInt("price"))
+					.build();
+					
+					
 			
 			fruits.add(fruit);
 		}
@@ -79,7 +82,7 @@ public class FruitRepository {
 		String sqlCmd = "select * from fruit where id = '"+id+"'";
 		ResultSet rs = stmt.executeQuery(sqlCmd);
 		
-		Fruit fruit = new Fruit();
+		Fruit fruit = Fruit.builder().build();
 		if(rs.next()) {
 			fruit.setCode(rs.getString("code"));
 			fruit.setName(rs.getString("name"));
