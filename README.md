@@ -351,12 +351,13 @@ lombok 就是在 source 上面定義了一些 annotation, 在 javac compile 真�
 java 5 之前沒有 enum, 幾乎都是用 String 來接值, 接著就得去判斷該 String 是否符合規範. 而 enum 就是明定只能接受這些數值的定義.
 	
 
-	````java
-	public enum Sex {
-	  M,
-	  F,
-	}
-	````
+````java
+public enum Sex {
+  M,
+  F,
+}
+````
+	
 可以利用 Sex sex = Sex.valueOf("M"); 來指定該 sex 的內容. 
 
 ## Homework 
