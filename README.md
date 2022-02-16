@@ -207,7 +207,9 @@ public class Model {
 * void insert(Model model);
 * void update(Model model);
 * void delete(Long id);
-
+	
+	
+	
 ## 不要使用 Statement 避免 SQL-Injection
 
 改用 PreparedStatement
@@ -246,7 +248,122 @@ ResultSet rs = pstmt.executeQuery();
 ````
 
 
+# Course 7 Use Opensources
 
+## 學習查找與使用 opensources
+以 database connection pooling 為概念, 我們需要一個 connection pooling, 
+如何上網 Goolge 查找發現比較適合的 connection pooling, 並且使用 maven pom.xml 定義相關 dependencies,
+我們可以發現這篇文章(https://medium.com/@jeevanpaatil/database-connection-pool-analysis-92d50ba4bd06)提到了許多 connection pooling 機制,
+此時, 我們可以選擇比較推薦的 HikariCP(https://github.com/brettwooldridge/HikariCP) 作為範例測試。
+	
+根據相關的說明, 我們可以很快地定義好相關的程式碼
+````java
+	HikariDataSource ds;
+	
+	public FruitRepository() {
+		
+		
+		
+		HikariConfig config = new HikariConfig();
+		config.setJdbcUrl("jdbc:postgresql://localhost:5432/testdb");
+		config.setUsername("postgres");
+		config.setPassword("postgres");
+		config.addDataSourceProperty("minimumIdle", "10");
+		config.addDataSourceProperty("maximumPoolSize", "30");
+		
+		
+		
+		this.ds = new HikariDataSource(config);
+	}
+	
+	
+	private Connection getConnection() throws SQLException {
+		return ds.getConnection();
+//		
+//		
+//		//Class.forName("org.postgresql.Driver");
+//		String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
+//		String username = "postgres";
+//		String password = "postgres";
+//		return DriverManager.getConnection(dbUrl, username, password);
+			
+	}
+````
+比較了運行的結果, 比起原本 Connection 不斷 I/O 重新連線花上 41 秒, 到不用 1 秒鐘, 大幅提升了運作效能。
+	
+## Date 的使用 (參考java技術手冊第13章, java.util.* 可以不用看了)
+
+先說結論, 在 java8 之後, 應該大量使用 java.time.* 的日期與時間, java.time package 大量參考了 jodatime 的設計, JDBC 4.2 版本之後也完全支持 java.time .
+	
+* java.time.LocalDate
+* java.time.LocalDateTime
+	
+可以透過 of(...) 的 method 進行預設值的配置. 
+
+````java
+// 計算 do something 的時間範例(msec級)	
+LocalDateTime startTime = LocalDateTime.now();
+// do something
+LocalDateTime stopTime = LocalDateTime.now();
+Long diff = ChronoUnit.MILLIS.between(startTime, stopTime);
+System.out.println("total "+diff+" msec");
+````
+	
+以往 java 內建的 java.util.Date 與 java.util.Calendar, 簡單來說, 太難用, 根本就直接可以捨棄. 不然就是搭配 java.text.DateFormat 一併寫 Utils 來處理, 還是太麻煩.
+	
+	
+## Annotation 的概念
+Annotation 是 java 5 開始用的設計, 主要是參考 .net 的設計, 作為 **描述用**
+	
+@Target : 描述的目標有
+* ElementType.TYPE : 能描述 class, interface, enum 等
+* ElementType.FIELD : 能描述相關的變數
+* ElementType.METHOD : 能描述方法
+* ElementType.PARAMETER : 能描述方法內的參數值
+* ElementType.CONSTRUCTOR : 能描述建構子
+* ElementType.LOCAL_VARIABLE : 能描述局部變數
+* ElementType.ANNOTATION_TYPE : 能描述其他的 annotation
+* ElementType.PACKAGE : 能描述 package
+	
+@Retention : 表示這個 annotation 的生命週期
+可選的值有三種
+* RetentionPolicy.SOURCE 表示此 annotation 只在 source java 中有效果，不會編譯進class文件, @Override就是這種注解
+* RetentionPolicy.CLASS  表示此 annotation 除了在 source java 有效果，也會編譯進class文件，但是在 runtime 是無效果的, @Retention的默認值，即是當沒有指定@Retention的時候，就會是這種類型
+* RetentionPolicy.RUNTIME 表示此 annotation 從 source java 到 runtime 一直存在, 程序可以透過 reflection 獲取這個 annotation 的訊息 
+	
+annotation 就是描述而已, 該怎麼表現和應用, 都是其他程式發現該 annotation 給予相關的行為。
+
+## Annotation Processing Tool (高階研究)
+https://docs.oracle.com/javase/7/docs/technotes/guides/apt/GettingStarted.html
+	
+## Project Lombok (https://projectlombok.org/)
+lombok 就是在 source 上面定義了一些 annotation, 在 javac compile 真正產生 class 之前, 
+把相關的 java code 產出中繼的 java code, 簡化我們實際撰寫 javabean 的內容. 
+我們通常會用到
+	* @Data
+	* @Builder
+	* @Log (暫時不練習) 
+或是要細膩到控制 @Getter @Setter @ToString 及 @EqualsAndHashCode
+另外, 在某些特殊狀況, 我們也會控制建構子 @NoArgsConstructor, @RequiredArgsConstructor and @AllArgsConstructor 
+大家可以多練習與比較差異.
+	
+## enum (請參考java技術手冊第18章)
+java 5 之前沒有 enum, 幾乎都是用 String 來接值, 接著就得去判斷該 String 是否符合規範. 而 enum 就是明定只能接受這些數值的定義.
+	
+
+````java
+public enum Sex {
+  M,
+  F,
+}
+````
+	
+可以利用 Sex sex = Sex.valueOf("M"); 來指定該 sex 的內容. 
+
+## Homework 
+練習定義一個 enum 並加入到自己的 object 之中.
+	
+		
 
 
 
