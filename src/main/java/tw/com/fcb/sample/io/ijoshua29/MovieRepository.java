@@ -29,10 +29,11 @@ public class MovieRepository {
 		Movie movie;
 		
 		while(rs.next()) {
-			movie = new Movie();
+			movie = Movie.builder().build();
 			movie.setCode(rs.getString("code"));
 			movie.setName(rs.getString("name"));
 			movie.setPrice(rs.getInt("price"));
+			movie.setRoom(MovieRoomEnum.valueOf(rs.getString("room")));		
 			
 			movies.add(movie);
 		}
@@ -52,12 +53,13 @@ public class MovieRepository {
 		pstmt.setInt(1, id.intValue());
 		ResultSet rs = pstmt.executeQuery();
 		
-		Movie movie = new Movie();
+		Movie movie = Movie.builder().build();
 		if(rs.next()) {
 			movie.setId(rs.getLong("id"));
 			movie.setCode(rs.getString("code"));
 			movie.setName(rs.getString("name"));
 			movie.setPrice(rs.getInt("price"));
+			movie.setRoom(MovieRoomEnum.valueOf(rs.getString("room")));
 		}
 		
 		rs.close();
@@ -70,11 +72,12 @@ public class MovieRepository {
 	public Movie insert(Movie movie) throws SQLException {
 		
 		Connection conn = getConnection();
-		String sqlCmd = "INSERT INTO movie(code, name, price) values (?, ? , ?) returning id";
+		String sqlCmd = "INSERT INTO movie(code, name, price, room) values (?, ? , ?, ?) returning id";
 		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
 		pstmt.setString(1, movie.getCode());
 		pstmt.setString(2, movie.getName());
 		pstmt.setInt(3, movie.getPrice());
+		pstmt.setString(4, movie.getRoom().toString());
 		ResultSet rs = pstmt.executeQuery();
 		
 		if(rs.next()) {
@@ -92,12 +95,13 @@ public class MovieRepository {
 	public void update(Movie movie) throws SQLException {
 		
 		Connection conn = getConnection();
-		String sqlCmd = "Update movie set code = ?, name = ?, price = ? where id = ?";
+		String sqlCmd = "Update movie set code = ?, name = ?, price = ?, room = ? where id = ?";
 		PreparedStatement pstmt = conn.prepareStatement(sqlCmd);
 		pstmt.setString(1, movie.getCode());
 		pstmt.setString(2, movie.getName());
 		pstmt.setInt(3, movie.getPrice());
-		pstmt.setInt(4, movie.getId().intValue());
+		pstmt.setString(4, movie.getRoom().toString());
+		pstmt.setInt(5, movie.getId().intValue());
 		pstmt.executeUpdate();
 		
 		pstmt.close();

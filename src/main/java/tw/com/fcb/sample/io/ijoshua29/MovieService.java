@@ -23,10 +23,12 @@ public class MovieService {
 				}				
 				
 				// insert
-				movie = new Movie();
+				movie = Movie.builder().build();
 				movie.setCode("A001");
 				movie.setName("The mission");
 				movie.setPrice(340);
+				movie.setRoom(MovieRoomEnum.R1);
+				
 				
 				movie = movieRepository.insert(movie);
 				System.out.println("insert return id=" + movie.getId());				
@@ -39,6 +41,8 @@ public class MovieService {
 				movie.setCode("A002");
 				movie.setName("Mission imposible");
 				movie.setPrice(380);
+				movie.setRoom(MovieRoomEnum.R2);
+				
 				movieRepository.update(movie);
 				getMovie = movieRepository.getById(movie.getId());
 				System.out.println("update get by id result:" + getMovie.toString());
