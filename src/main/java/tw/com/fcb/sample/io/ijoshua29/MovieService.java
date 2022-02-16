@@ -27,8 +27,7 @@ public class MovieService {
 				movie.setCode("A001");
 				movie.setName("The mission");
 				movie.setPrice(340);
-				movie.setRoom(MovieRoomEnum.R1);
-				
+				movie.setRoom(MovieRoomEnum.R1);				
 				
 				movie = movieRepository.insert(movie);
 				System.out.println("insert return id=" + movie.getId());				

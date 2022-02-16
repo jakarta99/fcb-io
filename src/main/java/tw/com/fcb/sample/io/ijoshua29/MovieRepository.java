@@ -118,5 +118,6 @@ public class MovieRepository {
 		
 		pstmt.close();
 		conn.close();
+		
 	}
 }

@@ -12,4 +12,5 @@ public class Movie {
 	private String name;
 	private int price;
 	private MovieRoomEnum room;
+	
 }
