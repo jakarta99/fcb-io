@@ -48,7 +48,7 @@ public class VehicleSharingService {
             vehicleSharing.setYear(year);
             vehicleSharing.setMonth(month);
 
-            vehicleSharing.setBrand(data[1]);
+            vehicleSharing.setBrand(VehicleBrandEnum.valueOf(data[1]));
 
             switch(data[2]) {
                 case "共享小客車":
