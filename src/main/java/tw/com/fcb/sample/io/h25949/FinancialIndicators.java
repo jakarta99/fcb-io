@@ -2,14 +2,18 @@ package tw.com.fcb.sample.io.h25949;
 
 import java.math.BigDecimal;
 
+import lombok.Data;
+
+@Data
 public class FinancialIndicators {
-	// 資料物件
+	private long id;
 	private int year;
 	private BigDecimal exchangeRate;
 	private BigDecimal foreign;
 	private BigDecimal stockIndex;
 	private BigDecimal stockAmount;
 
+	/*
 	@Override
 	public String toString() {
 		return "國內主要金融指標：年度=" + year + ", 匯率=" + exchangeRate + ", 外匯存底=" + foreign + ", 證券發行量加權股價指數=" + stockIndex
@@ -55,4 +59,5 @@ public class FinancialIndicators {
 	public void setStockAmount(BigDecimal stockAmount) {
 		this.stockAmount = stockAmount;
 	}
+	*/
 }
