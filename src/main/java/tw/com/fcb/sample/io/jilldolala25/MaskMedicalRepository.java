@@ -51,6 +51,7 @@ public class MaskMedicalRepository {
 
         MaskMedical maskMedical;
         while(rs.next()){
+
             maskMedical = new MaskMedical();
             maskMedical.setMedicalcode(rs.getString("medical_code"));
             maskMedical.setMedicalname(rs.getString("medical_name"));
@@ -174,19 +175,30 @@ public class MaskMedicalRepository {
 //        stmt.setString(1,code);
         ResultSet rs = stmt.executeQuery(sqlCmd);
 
-
+        MaskMedical maskMedical;
         List<MaskMedical> resultSet = new ArrayList<>();
         while (rs.next()){
-            MaskMedical maskMedical = new MaskMedical();
-            maskMedical.setId(rs.getLong("id"));
-            maskMedical.setMedicalcode(rs.getString("medical_code"));
-            maskMedical.setMedicalname(rs.getString("medical_name"));
-            maskMedical.setMedicaladdress(rs.getString("medical_address"));
-            maskMedical.setMedicalphone(rs.getString("medical_phone"));
-            maskMedical.setAldultcount(rs.getInt("aldult_count"));
-            maskMedical.setKidscount(rs.getInt("kids_count"));
-            maskMedical.setDate(rs.getString("update_date"));
-            maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type")));
+//            maskMedical = new MaskMedical();
+            maskMedical = MaskMedical.builder()
+                    .id(rs.getLong("id"))
+                    .medicalcode(rs.getString("medical_code"))
+                    .medicalname(rs.getString("medical_name"))
+                    .medicaladdress(rs.getString("medical_address"))
+                    .medicalphone(rs.getString("medical_phone"))
+                    .aldultcount(rs.getInt("aldult_count"))
+                    .kidscount(rs.getInt("kids_count"))
+                    .date(rs.getString("update_date"))
+                    .maskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type"))).build();
+//            maskMedical.setMedicalname(rs.getString("id"));
+//            maskMedical.setId(rs.getLong("id"));
+//            maskMedical.setMedicalcode(rs.getString("medical_code"));
+//            maskMedical.setMedicalname(rs.getString("medical_name"));
+//            maskMedical.setMedicaladdress(rs.getString("medical_address"));
+//            maskMedical.setMedicalphone(rs.getString("medical_phone"));
+//            maskMedical.setAldultcount(rs.getInt("aldult_count"));
+//            maskMedical.setKidscount(rs.getInt("kids_count"));
+//            maskMedical.setDate(rs.getString("update_date"));
+//            maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type")));
             resultSet.add(maskMedical);
         }
         rs.close();
@@ -220,8 +232,8 @@ public class MaskMedicalRepository {
         ResultSet rs = ptmt.executeQuery();
 
         if (rs.next()){
-            MaskMedicalEnum maskMedicalEnum = MaskMedicalEnum.CHAIN;
-            maskMedicalEnum.valueOf(rs.getString(9));
+            MaskMedicalEnum maskMedicalEnum = MaskMedicalEnum.valueOf(rs.getString(9));
+
             System.out.println("MaskMedicalEnum = " + maskMedicalEnum);
             switch (maskMedicalEnum){
                 case PRESCRIPTION:

@@ -18,7 +18,7 @@ public class FileApp {
             // 練習enum，輸入欲查詢之醫療機構代碼，取得醫療機構(enum)種類 2022/02/15
             maskWrite.FindMedicalType();
 //            // 輸入醫事機構代碼任意數，select DB後將結果寫file
-//            maskWrite.FileWriter();
+            maskWrite.FileWriter();
 
 
         } catch(Exception e) {
