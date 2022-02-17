@@ -6,17 +6,43 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 public class RetireRepository {
-	private Connection getConnection() throws SQLException {
-		//Class.forName("org.postgresql.Driver");
-		String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
+	
+HikariDataSource ds;
+	
+	public RetireRepository() {		
 		
-		String username = "postgres";
-		String password = "postgres";
-		return DriverManager.getConnection(dbUrl, username, password);
+		LocalDateTime startTime = LocalDateTime.now();
+		
+		HikariConfig config = new HikariConfig();
+		config.setJdbcUrl("jdbc:postgresql://localhost:5432/testdb");
+		config.setUsername("postgres");
+		config.setPassword("postgres");
+		config.addDataSourceProperty("minimumIdle", "10");
+		config.addDataSourceProperty("maximumPoolSize", "30");
+		
+		LocalDateTime stopTime = LocalDateTime.now();
+		Long diff = ChronoUnit.MILLIS.between(startTime, stopTime);
+		System.out.println("total "+diff+" msec");
+		
+		this.ds = new HikariDataSource(config);
+	}
+	private Connection getConnection() throws SQLException {
+//		Class.forName("org.postgresql.Driver");
+//		String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
+//		
+//		String username = "postgres";
+//		String password = "postgres";
+//		return DriverManager.getConnection(dbUrl, username, password);
+		return ds.getConnection();
 	}
 	
 	public List<RetireAge> findAll() throws  SQLException{
