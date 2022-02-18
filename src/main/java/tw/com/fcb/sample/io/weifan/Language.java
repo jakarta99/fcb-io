@@ -13,7 +13,7 @@ public class Language {
 	private String CreateDate;
 	private String year;
 	private String ChineseName;
-	private String Level;
+	private LanguageLevelEnum Level;
 	private String SignNum;
 	private String JoinNum;
 	private String PassNum;
