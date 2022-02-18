@@ -127,16 +127,16 @@ public class DividendService {
 			result = dividendRepository.getIndustryByIssuingCompany(issuingCompany,conn);
 				switch(result.get(0).getIndustry()){
 					case financial:
-						System.out.println("金融服務業");
+						System.out.println(IndustryEnum.financial.getCode()+IndustryEnum.financial.getDescription());
 						break;
 					case semiconductor:
-						System.out.println("半導體業");
+						System.out.println(IndustryEnum.semiconductor.getCode()+IndustryEnum.semiconductor.getDescription());
 						break;
 					case steel:
-						System.out.println("鋼鐵業");
+						System.out.println(IndustryEnum.steel.getCode()+IndustryEnum.semiconductor.getDescription());
 						break;
 					case biomedical:
-						System.out.println("生技業");
+						System.out.println(IndustryEnum.biomedical.getCode()+IndustryEnum.biomedical.getDescription());
 						break;
 			        default:
 			            break;

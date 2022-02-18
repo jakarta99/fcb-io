@@ -2,9 +2,27 @@ package tw.com.fcb.sample.io.yuwei;
 
 
 public enum IndustryEnum {
-	financial,semiconductor(),steel,biomedical
+	financial(17,"金融服務業"),
+	semiconductor(24,"半導體業"),
+	steel(10,"鋼鐵業"),
+	biomedical(22,"生技業");
 	
+	private int code;
+	private String description;
+	
+	IndustryEnum(int code,String desc){
+		this.code = code;
+		this.description = desc;
+	}
 
+	public int getCode() {
+		return code;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+	
 }
 
 
