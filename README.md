@@ -522,7 +522,7 @@ Thread 的議題, 可以在未來更多的應用中再討論
 
 
 ## Homework
-寫 /yourmodels 的 GET method, 包含查詢全部和 ID 單筆查詢
+寫 /yourmodels 的 GET method, 包含查詢全部和 ID 單筆查詢, 請參考 /fcb-web repository.
 
 
 
