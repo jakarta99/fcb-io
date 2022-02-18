@@ -62,6 +62,29 @@ public class FileSecuritiesApp {
 					String etfTrans = scanner.next();
 					fileSecurities.setEtfTransaction(etfTrans);
 					
+					System.out.print("Enter the currCode: ");
+					String currCode = scanner.next();
+					
+					if(currCode.equals("USD") || currCode.equals("01")) {
+						fileSecurities.setCurrencyEnum(FileCurrencyEnum.USD);
+					}
+					else if(currCode.equals("JPY") || currCode.equals("11")) {
+						fileSecurities.setCurrencyEnum(FileCurrencyEnum.JPY);
+					}
+					else if(currCode.equals("ZAR") || currCode.equals("15")) {
+						fileSecurities.setCurrencyEnum(FileCurrencyEnum.ZAR);
+					}
+					else if(currCode.equals("EUR") || currCode.equals("21")) {
+						fileSecurities.setCurrencyEnum(FileCurrencyEnum.EUR);
+					}
+					else if(currCode.equals("TWD") || currCode.equals("99")) {
+						fileSecurities.setCurrencyEnum(FileCurrencyEnum.TWD);
+					}
+					else {
+						System.out.println("Wrong Currency Code !!!");
+					}
+					
+//					System.out.println(fileSecurities.getCurrencyEnum().name());
 					fileSecuritiesService.insert(fileSecurities);
 				}
 				else if(option == 6) {

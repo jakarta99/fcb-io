@@ -125,5 +125,8 @@ public class FinancialIndicatorsService {
 		}
 		scannerById.close();
 	}
-
+	
+	public enum option {
+	    a,b, c, d,e
+	}
 }

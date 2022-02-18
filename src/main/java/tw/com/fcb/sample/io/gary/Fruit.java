@@ -1,12 +1,10 @@
 package tw.com.fcb.sample.io.gary;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Builder;
+import lombok.Data;
 
-@Getter
-@Setter
-@ToString
+@Data
+@Builder
 public class Fruit {
 	
 	Long id;

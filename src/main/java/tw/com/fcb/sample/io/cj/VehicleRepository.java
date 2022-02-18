@@ -35,7 +35,7 @@ public class VehicleRepository {
             vehicleSharing.setId(rs.getInt("id"));
             vehicleSharing.setYear(rs.getInt("year"));
             vehicleSharing.setMonth(rs.getInt("month"));
-            vehicleSharing.setBrand(rs.getString("brand"));
+            vehicleSharing.setBrand(VehicleBrandEnum.valueOf(rs.getString("brand")));
             vehicleSharing.setType(rs.getInt("type"));
             vehicleSharing.setAmount(rs.getInt("amount"));
 //            System.out.println("!!!"+vehicleSharing);
@@ -81,7 +81,7 @@ public class VehicleRepository {
             vehicleSharing.setId(rs.getInt("id"));
             vehicleSharing.setYear(rs.getInt("year"));
             vehicleSharing.setMonth(rs.getInt("month"));
-            vehicleSharing.setBrand(rs.getString("brand"));
+            vehicleSharing.setBrand(VehicleBrandEnum.valueOf(rs.getString("brand")));
             vehicleSharing.setType(rs.getInt("type"));
             vehicleSharing.setAmount(rs.getInt("amount"));
 //            System.out.println("!!!"+vehicleSharing);
@@ -103,7 +103,7 @@ public class VehicleRepository {
             vehicleSharing.setId(rs.getInt("id"));
             vehicleSharing.setYear(rs.getInt("year"));
             vehicleSharing.setMonth(rs.getInt("month"));
-            vehicleSharing.setBrand(rs.getString("brand"));
+            vehicleSharing.setBrand(VehicleBrandEnum.valueOf(rs.getString("brand")));
             vehicleSharing.setType(rs.getInt("type"));
             vehicleSharing.setAmount(rs.getInt("amount"));
 //            System.out.println("!!!"+vehicleSharing);

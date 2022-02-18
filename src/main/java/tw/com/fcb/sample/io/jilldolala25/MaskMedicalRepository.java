@@ -1,17 +1,39 @@
 package tw.com.fcb.sample.io.jilldolala25;
 
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MaskMedicalRepository {
+    HikariDataSource ds;
+    public  MaskMedicalRepository() {
+        LocalDateTime startTime = LocalDateTime.now();
+
+        HikariConfig config = new HikariConfig();
+        config.setJdbcUrl("jdbc:postgresql://localhost:5432/testdb");
+        config.setUsername("postgres");
+        config.setPassword("postgres");
+        config.addDataSourceProperty("minimumIdle", "10");
+        config.addDataSourceProperty("maximumPoolSize", "30");
+        LocalDateTime endTime = LocalDateTime.now();
+        Long diff= ChronoUnit.MILLIS.between(startTime,endTime);
+        System.out.println("total " + diff + "mesc");
+        this.ds = new HikariDataSource(config);
+
+    }
 
     public Connection getConnection() throws SQLException {
-        String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
-        String username = "postgres";
-        String password = "postgres";
-        return DriverManager.getConnection(dbUrl,username,password);
+        return ds.getConnection();
+//        String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
+//        String username = "postgres";
+//        String password = "postgres";
+//        return DriverManager.getConnection(dbUrl,username,password);
 
     }
 
@@ -29,6 +51,7 @@ public class MaskMedicalRepository {
 
         MaskMedical maskMedical;
         while(rs.next()){
+
             maskMedical = new MaskMedical();
             maskMedical.setMedicalcode(rs.getString("medical_code"));
             maskMedical.setMedicalname(rs.getString("medical_name"));
@@ -37,6 +60,7 @@ public class MaskMedicalRepository {
             maskMedical.setAldultcount(rs.getInt("aldult_count"));
             maskMedical.setKidscount(rs.getInt("kids_count"));
             maskMedical.setDate(rs.getString("update_date"));
+            maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type")));
 
             maskMedicals.add(maskMedical);
 
@@ -51,8 +75,8 @@ public class MaskMedicalRepository {
 
         Connection conn = getConnection();
         PreparedStatement stmt = conn.prepareStatement
-                ("INSERT INTO maskmedical(medical_code,medical_name,medical_address,medical_phone,aldult_count,kids_count,update_date)" +
-                        "VALUES(?,?,?,?,?,?,?) returning id");
+                ("INSERT INTO maskmedical(medical_code,medical_name,medical_address,medical_phone,aldult_count,kids_count,update_date,medical_type)" +
+                        "VALUES(?,?,?,?,?,?,?,?) returning id");
         stmt.setString(1,maskMedical.getMedicalcode());
         stmt.setString(2, maskMedical.getMedicalname());
         stmt.setString(3, maskMedical.getMedicaladdress());
@@ -60,6 +84,7 @@ public class MaskMedicalRepository {
         stmt.setInt(5,maskMedical.getAldultcount());
         stmt.setInt(6,maskMedical.getKidscount());
         stmt.setString(7, maskMedical.getDate());
+        stmt.setString(8, String.valueOf(maskMedical.getMaskMedicalEnum()));
 
 
         ResultSet rs = stmt.executeQuery();
@@ -91,6 +116,7 @@ public class MaskMedicalRepository {
             maskMedical.setAldultcount(rs.getInt("aldult_count"));
             maskMedical.setKidscount(rs.getInt("kids_count"));
             maskMedical.setDate(rs.getString("update_date"));
+            maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type")));
         }
         rs.close();
         stmt.close();
@@ -149,18 +175,30 @@ public class MaskMedicalRepository {
 //        stmt.setString(1,code);
         ResultSet rs = stmt.executeQuery(sqlCmd);
 
-
+        MaskMedical maskMedical;
         List<MaskMedical> resultSet = new ArrayList<>();
         while (rs.next()){
-            MaskMedical maskMedical = new MaskMedical();
-            maskMedical.setId(rs.getLong("id"));
-            maskMedical.setMedicalcode(rs.getString("medical_code"));
-            maskMedical.setMedicalname(rs.getString("medical_name"));
-            maskMedical.setMedicaladdress(rs.getString("medical_address"));
-            maskMedical.setMedicalphone(rs.getString("medical_phone"));
-            maskMedical.setAldultcount(rs.getInt("aldult_count"));
-            maskMedical.setKidscount(rs.getInt("kids_count"));
-            maskMedical.setDate(rs.getString("update_date"));
+//            maskMedical = new MaskMedical();
+            maskMedical = MaskMedical.builder()
+                    .id(rs.getLong("id"))
+                    .medicalcode(rs.getString("medical_code"))
+                    .medicalname(rs.getString("medical_name"))
+                    .medicaladdress(rs.getString("medical_address"))
+                    .medicalphone(rs.getString("medical_phone"))
+                    .aldultcount(rs.getInt("aldult_count"))
+                    .kidscount(rs.getInt("kids_count"))
+                    .date(rs.getString("update_date"))
+                    .maskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type"))).build();
+//            maskMedical.setMedicalname(rs.getString("id"));
+//            maskMedical.setId(rs.getLong("id"));
+//            maskMedical.setMedicalcode(rs.getString("medical_code"));
+//            maskMedical.setMedicalname(rs.getString("medical_name"));
+//            maskMedical.setMedicaladdress(rs.getString("medical_address"));
+//            maskMedical.setMedicalphone(rs.getString("medical_phone"));
+//            maskMedical.setAldultcount(rs.getInt("aldult_count"));
+//            maskMedical.setKidscount(rs.getInt("kids_count"));
+//            maskMedical.setDate(rs.getString("update_date"));
+//            maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf(rs.getString("medical_type")));
             resultSet.add(maskMedical);
         }
         rs.close();
@@ -171,8 +209,8 @@ public class MaskMedicalRepository {
 
     public void insert(MaskMedical maskMedical, Connection conn) throws SQLException {
 
-        PreparedStatement stmt = conn.prepareStatement("INSERT INTO maskmedical (medical_code,medical_name,medical_address,medical_phone,aldult_count,kids_count,update_date)" +
-                "VALUES (?,?,?,?,?,?,?)");
+        PreparedStatement stmt = conn.prepareStatement("INSERT INTO maskmedical (medical_code,medical_name,medical_address,medical_phone,aldult_count,kids_count,update_date,medical_type)" +
+                "VALUES (?,?,?,?,?,?,?,?)");
         stmt.setString(1,maskMedical.getMedicalcode());
         stmt.setString(2,maskMedical.getMedicalname());
         stmt.setString(3,maskMedical.getMedicaladdress());
@@ -180,9 +218,38 @@ public class MaskMedicalRepository {
         stmt.setInt(5,maskMedical.getAldultcount());
         stmt.setInt(6,maskMedical.getKidscount());
         stmt.setString(7, maskMedical.getDate());
+        stmt.setString(8, String.valueOf(maskMedical.getMaskMedicalEnum()));
         stmt.executeUpdate();
         stmt.clearParameters();
     }
 
 
+    public void getBySpecifyMedicalCode(String medicalcode) throws SQLException {
+        Connection conn = getConnection();
+        String sqlCmd = "select * from maskmedical where medical_code = ?";
+        PreparedStatement ptmt = conn.prepareStatement(sqlCmd);
+        ptmt.setString(1,medicalcode);
+        ResultSet rs = ptmt.executeQuery();
+
+        if (rs.next()){
+            MaskMedicalEnum maskMedicalEnum = MaskMedicalEnum.valueOf(rs.getString(9));
+
+            System.out.println("MaskMedicalEnum = " + maskMedicalEnum);
+            switch (maskMedicalEnum){
+                case PRESCRIPTION:
+                    System.out.println("您查詢之醫事機構為「處方箋藥局」");
+                    break;
+                case HEATCH:
+                    System.out.println("您查詢之醫事機構為「健保藥局」");
+                    break;
+                case CHAIN:
+                    System.out.println("您查詢之醫事機構為「連鎖藥局」");
+                    break;
+                case COMPLEX:
+                    System.out.println("您查詢之醫事機構為「綜合藥局」");
+                    break;
+            }
+        }
+
+    }
 }

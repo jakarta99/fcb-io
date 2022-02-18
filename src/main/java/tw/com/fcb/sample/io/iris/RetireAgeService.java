@@ -43,6 +43,7 @@ public class RetireAgeService {
     }
 	
 //	   2022/02/11 homework
+//	   2022/02/15 hw 新增RetireEnum
 	public void runCrud() throws SQLException {
 		// run findAll
 		RetireRepository rey = new RetireRepository();
@@ -60,6 +61,7 @@ public class RetireAgeService {
 		retObj.setVoluntary_cnt(0);
 		retObj.setAge_cnt(0);
 		retObj.setOrder_cnt(0);
+		retObj.setRetireEnum(RetireEnum.M);
 		rey.inserDB(retObj);
 		retires = rey.findAll();
 		System.out.println("新增後資料內容 = " + rey.getByType("test"));

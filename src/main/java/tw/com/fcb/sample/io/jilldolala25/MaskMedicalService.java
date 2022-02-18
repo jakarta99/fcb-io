@@ -6,15 +6,17 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class MaskMedicalService {
     List<MaskMedical> maskList ;
     MaskMedicalRepository maskMedicalRepository ;
-    SimpleDateFormat dtf = new SimpleDateFormat("yyyy/MM/dd");
-    Calendar calendar = Calendar.getInstance();
-    Date todayDate = calendar.getTime();
-    String updateDate = dtf.format(todayDate);
+
+    LocalDateTime now = LocalDateTime.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+    String updateDate = now.format(formatter);
 
     public MaskMedicalService()  {
     }
@@ -70,6 +72,7 @@ public class MaskMedicalService {
                 maskMedical.setAldultcount(Integer.parseInt(data[4]));
                 maskMedical.setKidscount(Integer.parseInt(data[5]));
                 maskMedical.setDate(data[6]);
+                maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf(data[7]));
 
                 // add to list
                 maskList.add(maskMedical);
@@ -88,6 +91,8 @@ public class MaskMedicalService {
             throw new RuntimeException(e);
         }
     }
+
+
     public MaskMedical  setMaskMedical(){
         MaskMedical maskMedical = new MaskMedical();
         maskMedical.setMedicalcode("2331200010");
@@ -97,6 +102,7 @@ public class MaskMedicalService {
         maskMedical.setAldultcount(1410);
         maskMedical.setKidscount(1440);
         maskMedical.setDate("2022/2/8");
+        maskMedical.setMaskMedicalEnum(MaskMedicalEnum.valueOf("CHAIN"));
         return maskMedical;
     }
 
@@ -119,7 +125,7 @@ public class MaskMedicalService {
 //        bufferedWriter.close();
 //從資料庫讀出，再寫檔
 
-        try ( Connection conn = maskMedicalRepository.getConnection()) {
+        try {
             System.out.print("請輸入醫事機構代碼 : ");
             Scanner scanner = new Scanner(System.in);
             var medicalcode = scanner.next();
@@ -158,5 +164,12 @@ public class MaskMedicalService {
 
 
         return outPutFormat;
+    }
+
+    public void FindMedicalType() throws SQLException {
+        System.out.print("請輸入查詢之醫事機構代碼 : ");
+        Scanner scanner = new Scanner(System.in);
+        var medicalcode = scanner.next();
+        maskMedicalRepository.getBySpecifyMedicalCode(medicalcode);
     }
 }

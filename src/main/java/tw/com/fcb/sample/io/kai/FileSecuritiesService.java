@@ -34,6 +34,7 @@ public class FileSecuritiesService {
 			}
 				
 			String[] tokenData = lineData.split(",");
+//			fileSecurities = FileSecurities.builder().build();
 			fileSecurities = new FileSecurities();
 			fileSecurities.setSecuritiesOrder(tokenData[0]);
 			fileSecurities.setStockCode(tokenData[1]);
@@ -42,6 +43,7 @@ public class FileSecuritiesService {
 			fileSecurities.setEtfCode(tokenData[4]);
 			fileSecurities.setEtfName(tokenData[5]);
 			fileSecurities.setEtfTransaction(tokenData[6]);
+			fileSecurities.setCurrencyEnum(FileCurrencyEnum.valueOf(tokenData[7]));
 				
 			// INSERT INTO DB...
 			fileRepository.insert(fileSecurities);
@@ -151,7 +153,8 @@ public class FileSecuritiesService {
 				listSecurities.get(i).getStockTransaction() + "," + 
 				listSecurities.get(i).getEtfCode() + "," + 
 				listSecurities.get(i).getEtfName() + "," + 
-				listSecurities.get(i).getEtfTransaction();
+				listSecurities.get(i).getEtfTransaction() + "," + 
+				listSecurities.get(i).getCurrencyEnum();
 		
 		return result;
 	}
