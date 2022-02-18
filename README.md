@@ -363,6 +363,189 @@ public enum Sex {
 ## Homework 
 練習定義一個 enum 並加入到自己的 object 之中.
 	
+	
+
+
+# Course 8 OOP, Logging, Web, Thread
+
+## Abstract Class and Interface
+
+* interface 我們用來做定義 implements 的 class 一定要具備哪些 methods, 主要目的是就是初期定義介面用, 來強制大家去實作相關 methods.
+* abstract class 雖然也可以要求大家一定要去實作 abstract methods, 但是, 主要目的是 reusable (重用), 通常會是重構時將相關重複的程式碼抽出.
+
+
+例如, 我們發現 PG1Service 與 PG2Service 具有雷同的流程與相似的程式碼, 可以抽出相關的程式作為共用的 method, 
+但是流程之中有不同的地方時, 我們可以抽出來一個 abstract method 交給繼承者去實作即可.
+
+````java
+	public void doIO() {
+	
+		System.out.println("READ CIF");
+		
+		System.out.println("READ RATE");
+		
+		save();
+		
+	}
+	
+	abstract void save();
+
+````
+
+## Logging
+
+logging 的實作有非常多, 我們通常使用 slf4j 作為統一的介面, 去存取相關的 logging implementations, 只需要在 classpath 之中放入以下的 jar 及該 logging 實作 jar 檔案即可
+
+* slf4j-nop.jar 
+* slf4j-simple.jar, 
+* slf4j-log4j12.jar, 
+* slf4j-jdk14.jar 
+* logback-classic.jar
+
+以目前來說, 我們比較推薦使用 logback ( https://logback.qos.ch/manual/index.html ), 不過現在 slf4j 2.0 尚未穩定, 所以 hikari 有用到 2.0 的部份, 請在 pom.xml 之中 exclude 掉
+
+````xml
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>5.0.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+````
+
+
+接著, 在 /src/main/resources/ 之下放入 logback.xml
+
+````xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="tw.com.fcb.sample.io.gary" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <root level="error">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>
+````
+
+使用 log 我們只需要在 class 之中透過 LoggerFactory.getLogger(getClass()); 或是直接使用 lombok 的 @Log 
+
+````java
+package a.b.c;
+
+public class SomeClass {
+
+	Logger log = LoggerFactory.getLogger(SomeClass.class);
+	
+	public void someMethod() {
+	
+		log.debug("this is debug");
+		log.info("this is info");
+		log.warn("this is warn");
+		log.error("this is error");
+		log.fatal("this is fatal");
+		
+	}
+}
+````
+當 root 等級設定為 warn, 只有 warn, error, 與 fatal 較高等級的訊息會被印出, 如果設定 debug, 就是所有訊息等級都會印出.
+我們可以把 root 等級設定為 error, 我們正在執行修改或關注的 package, 可以設定為較低的等級, 例如 debug, 這樣就可以避免過多的訊息造成除錯的噪音.
+另外, logger appender 可以設定輸出的格式與輸出的目標.
+在未來微服務架構, 我們會使用 
+
+* logstash
+* fluentd
+* filebeat
+
+
+來蒐集 log 資訊, 集中到 ElasticSearch, 再交由 Kibana 進行 log 追蹤與查詢. 因此, 要懂得如何去控制 log 的多寡, 未來 coding rule 也得規範那些訊息一定要印出.
+
+## Web
+
+JavaEE 之中, 有定義了
+* Servlet
+* Filter
+* Listener
+
+不過, 新手比較需要關注的是 Servlet, 一個 Servlet 現在只要指定該 class extends HttpServlet 是 @WebServlet, 裡面定義連結的 URL
+
+
+````java
+@WebServlet("/hello")
+public class HelloServlet extends HttpServlet {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		PrintWriter out = response.getWriter();
+		
+		out.println("Hello "+request.getParameter("name"));
+		
+		
+		// response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+}
+````
+
+如果只是處理 HttpMethod 的 GET method (預設的瀏覽器連結網站就是 GET method), 我們只需要寫 doGet methods.
+doGet method 的 arguments 之中主要是
+* HttpServletRequest
+* HttpServletResponse
+
+* 我們取得外部變數是使用 request.getParameter("parameter name, if you use ?a=1, the name is 'a'");
+* 我們要寫出為網頁是使用 response.getWriter().println("content...you can use HTML here.")
+
+當我們 Servlet 接到之後, 就可以利用接到的數值傳到後端 Service, 就可以到資料庫存取資料再透過 response.getWriter() 去輸出到網頁. 
+
+
+
+## Thread
+Thread 的議題, 可以在未來更多的應用中再討論
+
+
+
+
+## Homework
+寫 /yourmodels 的 GET method, 包含查詢全部和 ID 單筆查詢
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
 		
 
 
