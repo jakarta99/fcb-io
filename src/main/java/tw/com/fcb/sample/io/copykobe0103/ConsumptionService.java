@@ -36,25 +36,27 @@ public class ConsumptionService {
             //地區別代碼：63000000臺北市、64000000高雄市、65000000新北市、66000000臺中市、67000000臺南市、68000000桃園市
             switch (data[1]){
                 case "63000000":
-                    consumption.setRegion("臺北市");
+//                    consumption.setRegion("臺北市");
+                    consumption.setRegion(ConsumptionRegionEnum.臺北市);
                     break;
                 case "64000000":
-                    consumption.setRegion("高雄市");
+                    consumption.setRegion(ConsumptionRegionEnum.高雄市);
                     break;
                 case "65000000":
-                    consumption.setRegion("新北市");
+                    consumption.setRegion(ConsumptionRegionEnum.新北市);
                     break;
                 case "66000000":
-                    consumption.setRegion("臺中市");
+                    consumption.setRegion(ConsumptionRegionEnum.臺中市);
                     break;
                 case "67000000":
-                    consumption.setRegion("臺南市");
+                    consumption.setRegion(ConsumptionRegionEnum.臺南市);
                     break;
                 case "68000000":
-                    consumption.setRegion("桃園市");
+                    consumption.setRegion(ConsumptionRegionEnum.桃園市);
                     break;
                 default:
-                    consumption.setRegion("其它縣市");
+//                    consumption.setRegion("其它縣市");
+                    consumption.setRegion(ConsumptionRegionEnum.其它縣市);
             }
             //計算跨境消費比重
             double CrossBorderTradePercentage;

@@ -30,7 +30,7 @@ public class LanguageService {
 			language.setCreateDate(data[1]);
 			language.setYear(data[2]);
 			language.setChineseName(data[3]);
-			language.setLevel(data[4]);
+			language.setLevel(LanguageLevelEnum.valueOf(data[4]));
 			language.setSignNum(data[5]);
 			language.setJoinNum(data[6]);
 			language.setPassNum(data[7]);

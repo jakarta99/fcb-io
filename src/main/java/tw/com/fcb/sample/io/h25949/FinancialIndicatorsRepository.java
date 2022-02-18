@@ -5,8 +5,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import lombok.Builder;
 
 public class FinancialIndicatorsRepository {
 
@@ -36,6 +39,7 @@ public class FinancialIndicatorsRepository {
 			count = count + ps.executeUpdate();
 			;
 		}
+		conn.close();
 		return count;
 	}
 
@@ -57,9 +61,11 @@ public class FinancialIndicatorsRepository {
 
 			FinancialIndicators.add(FinancialIndicator);
 		}
+		conn.close();
 		return FinancialIndicators;
 	}
-
+	
+	@Builder
 	public FinancialIndicators getById(int optionById) throws SQLException {
 		Connection conn = getConnection();
 		String sqlCmd = "select * from fruit where the_year = ?";
@@ -69,14 +75,15 @@ public class FinancialIndicatorsRepository {
 		ResultSet rs = ps.executeQuery();
 
 		FinancialIndicators FinancialIndicator = new FinancialIndicators();
-		while (rs.next()) {
+		//FinancialIndicators FinancialIndicator = FinancialIndicators.builder().build();
+		if (rs.next()) {
 			FinancialIndicator.setYear(rs.getInt("the_year"));
 			FinancialIndicator.setExchangeRate(rs.getBigDecimal("exchange_rate"));
 			FinancialIndicator.setForeign(rs.getBigDecimal("the_foreign"));
 			FinancialIndicator.setStockIndex(rs.getBigDecimal("stock_index"));
 			FinancialIndicator.setStockAmount(rs.getBigDecimal("stock_amount"));
 		}
-
+		conn.close();
 		return FinancialIndicator;
 	}
 
@@ -91,6 +98,7 @@ public class FinancialIndicatorsRepository {
 		ps.setBigDecimal(4, financialIndicator.getStockAmount());
 		ps.setInt(5, financialIndicator.getYear());
 
+		conn.close();
 		return ps.executeUpdate();
 	}
 
@@ -101,6 +109,7 @@ public class FinancialIndicatorsRepository {
 
 		ps.setInt(1, optionById);
 
+		conn.close();
 		return ps.executeUpdate();
 	}
 
