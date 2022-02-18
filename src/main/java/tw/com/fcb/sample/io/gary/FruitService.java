@@ -1,27 +1,18 @@
 package tw.com.fcb.sample.io.gary;
 
+
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 public class FruitService {
+	
+	Logger log = LoggerFactory.getLogger(FruitService.class);
 
 	
 	public void runCrud() {
-		
-		// run findAll
-		
-		// List<Fruit> fruits.size = 0
-		
-		
-		// insert
-		
-		// getById(theFruit.getId());
-		
-		
-		// update price
-		
-		// delete fruit by id
-		
-		
-		
-		
+		log.debug("This is my log");
 	}
 	
 }
