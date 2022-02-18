@@ -6,7 +6,8 @@ import lombok.Data;
 public class Consumption {
     private Long id;
     private String yearMonth;
-    private String region;
+//    private String region;
+    private ConsumptionRegionEnum region;
     private String crossBorderPercentage;
     private double cardCount;
     private double totalTradeCount;
