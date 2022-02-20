@@ -7,6 +7,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
+
 public class Language {
 
 	private int Seq;
@@ -22,6 +23,8 @@ public class Language {
 		return "insert into language values(" + Seq + ",'" + CreateDate + "', '" + year + "', '" + ChineseName
 				+ "','" + Level + "', '" + SignNum + "', '" + JoinNum + "', '" + PassNum + "');";
 	}
+
+
 	
 	
 

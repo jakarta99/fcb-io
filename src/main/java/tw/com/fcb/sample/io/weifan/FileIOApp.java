@@ -52,7 +52,6 @@ public class FileIOApp {
 		
 		//Update
 		Lan.setChineseName("胡言亂語");
-		Lan.setLevel("超低級");
 		try {
 			DB.Update(Lan);
 		} catch (Exception e) {

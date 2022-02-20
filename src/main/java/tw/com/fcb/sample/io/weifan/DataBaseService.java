@@ -80,7 +80,7 @@ public class DataBaseService {
 		pStatement.setString(2,Lan.getCreateDate());
 		pStatement.setString(3,Lan.getYear());
 		pStatement.setString(4,Lan.getChineseName());
-		pStatement.setString(5,Lan.getLevel());
+		pStatement.setString(5,Lan.getLevel().toString());
 		pStatement.setString(6,Lan.getSignNum());
 		pStatement.setString(7,Lan.getJoinNum());
 		pStatement.setString(8,Lan.getPassNum());
@@ -97,7 +97,7 @@ public class DataBaseService {
 		pStatement.setString(1,Lan.getCreateDate());
 		pStatement.setString(2,Lan.getYear());
 		pStatement.setString(3,Lan.getChineseName());
-		pStatement.setString(4,Lan.getLevel());
+		pStatement.setString(4,Lan.getLevel().toString());
 		pStatement.setString(5,Lan.getSignNum());
 		pStatement.setString(6,Lan.getJoinNum());
 		pStatement.setString(7,Lan.getPassNum());
