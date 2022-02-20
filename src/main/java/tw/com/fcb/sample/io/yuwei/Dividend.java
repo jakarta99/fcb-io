@@ -1,5 +1,14 @@
 package tw.com.fcb.sample.io.yuwei;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Dividend {
 	
 	Long id;
@@ -18,99 +27,5 @@ public class Dividend {
 	
 	private String issuingCompany;
 
-	
-	
-	public Long getId() {
-		return id;
-	}
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-
-
-
-	@Override
-	public String toString() {
-		return "Dividend [id=" + id + ", allocationOfAnnual=" + allocationOfAnnual + ", cashDividend=" + cashDividend
-				+ ", stockDividend=" + stockDividend + ", total=" + total + ", totalCashDividendUnit="
-				+ totalCashDividendUnit + ", shareholdingRatio=" + shareholdingRatio + ", issuingCompany="
-				+ issuingCompany + "]";
-	}
-
-
-	public int getAllocationOfAnnual() {
-		return allocationOfAnnual;
-	}
-
-
-	public void setAllocationOfAnnual(int allocationOfAnnual) {
-		this.allocationOfAnnual = allocationOfAnnual;
-	}
-
-
-	public double getCashDividend() {
-		return cashDividend;
-	}
-
-
-	public void setCashDividend(double cashDividend) {
-		this.cashDividend = cashDividend;
-	}
-
-
-	public double getStockDividend() {
-		return stockDividend;
-	}
-
-
-	public void setStockDividend(double stockDividend) {
-		this.stockDividend = stockDividend;
-	}
-
-
-	public double getTotal() {
-		return total;
-	}
-
-
-	public void setTotal(double total) {
-		this.total = total;
-	}
-
-
-	public double getTotalCashDividendUnit() {
-		return totalCashDividendUnit;
-	}
-
-
-	public void setTotalCashDividendUnit(double totalCashDividendUnit) {
-		this.totalCashDividendUnit = totalCashDividendUnit;
-	}
-
-
-	public double getShareholdingRatio() {
-		return shareholdingRatio;
-	}
-
-
-	public void setShareholdingRatio(double shareholdingRatio) {
-		this.shareholdingRatio = shareholdingRatio;
-	}
-
-
-	public String getIssuingCompany() {
-		return issuingCompany;
-	}
-
-
-	public void setIssuingCompany(String issuingCompany) {
-		this.issuingCompany = issuingCompany;
-	}
-
-
-
-
+	private IndustryEnum industry;
 }

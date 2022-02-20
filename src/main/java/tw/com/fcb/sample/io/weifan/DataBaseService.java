@@ -37,7 +37,7 @@ public class DataBaseService {
 			Lan.setCreateDate(resultSet.getString("createdate"));
 			Lan.setYear(resultSet.getString("year"));
 			Lan.setChineseName(resultSet.getString("chinesename"));
-			Lan.setLevel(resultSet.getString("level"));
+			Lan.setLevel(LanguageLevelEnum.valueOf(resultSet.getString("level")));
 			Lan.setSignNum(resultSet.getString("signnum"));
 			Lan.setJoinNum(resultSet.getString("joinnum"));
 			Lan.setPassNum(resultSet.getString("passnum"));
@@ -63,7 +63,7 @@ public class DataBaseService {
 		Lan.setCreateDate(resultSet.getString("createdate"));
 		Lan.setYear(resultSet.getString("year"));
 		Lan.setChineseName(resultSet.getString("chinesename"));
-		Lan.setLevel(resultSet.getString("level"));
+		Lan.setLevel(LanguageLevelEnum.valueOf(resultSet.getString("level")));
 		Lan.setSignNum(resultSet.getString("signnum"));
 		Lan.setJoinNum(resultSet.getString("joinnum"));
 		Lan.setPassNum(resultSet.getString("passnum"));

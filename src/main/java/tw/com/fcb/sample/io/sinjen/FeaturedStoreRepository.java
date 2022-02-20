@@ -46,7 +46,8 @@ public class FeaturedStoreRepository {
 			while (rs.next()) {
 				StoreRow row = new StoreRow();
 				row.setId(Long.valueOf(rs.getInt("id")));
-				row.setZone(rs.getString("zone"));
+				//row.setZone(rs.getString("zone"));
+				row.setZone(String.valueOf(FeaturedZoneEnum.valueOf(rs.getString("zone"))));
 				row.setStore(rs.getString("store"));
 				row.setStoreTel(rs.getString("store_tel"));
 				row.setStoreAdd(rs.getString("store_add"));
@@ -104,7 +105,8 @@ public class FeaturedStoreRepository {
 			rs = stmt.executeQuery();
 			if(rs.next()) {
 				row.setId(Long.valueOf(rs.getInt("id")));
-				row.setZone(rs.getString("zone"));
+				//row.setZone(rs.getString("zone"));
+				row.setZone(String.valueOf(FeaturedZoneEnum.valueOf(rs.getString("zone"))));
 				row.setStore(rs.getString("store"));
 				row.setStoreTel(rs.getString("store_tel"));
 				row.setStoreAdd(rs.getString("store_add"));

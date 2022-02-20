@@ -49,14 +49,26 @@ public class DividendService {
 	
 	
     public Dividend setDividend(){
-    	Dividend dividend = new Dividend();
-		dividend.setAllocationOfAnnual(111);
-		dividend.setCashDividend(2);
-		dividend.setStockDividend(2);
-		dividend.setTotal(4);
-		dividend.setTotalCashDividendUnit(40.24);
-		dividend.setShareholdingRatio(13.11);
-		dividend.setIssuingCompany("富邦金控");
+//    	Dividend dividend = new Dividend();
+//		dividend.setAllocationOfAnnual(111);
+//		dividend.setCashDividend(2);
+//		dividend.setStockDividend(2);
+//		dividend.setTotal(4);
+//		dividend.setTotalCashDividendUnit(40.24);
+//		dividend.setShareholdingRatio(13.11);
+//		dividend.setIssuingCompany("富邦金控");
+//		dividend.setIndustry(IndustryEnum.financial);
+    	Dividend dividend = Dividend.builder()
+    			.allocationOfAnnual(111)
+    			.cashDividend(2)
+    			.stockDividend(2)
+    			.total(4)
+    			.totalCashDividendUnit(40.24)
+    			.shareholdingRatio(13.11)
+    			.issuingCompany("富邦金控")
+    			.industry(IndustryEnum.financial)
+    			.build();
+    	
         return dividend;
     }
 	
@@ -91,6 +103,7 @@ public class DividendService {
 				dividend.setTotalCashDividendUnit(Double.parseDouble(data[4]));
 				dividend.setShareholdingRatio(Double.parseDouble(data[5]));
 				dividend.setIssuingCompany(data[6]);
+				dividend.setIndustry(IndustryEnum.valueOf(data[7]));
 				System.out.println(dividend);
 				// 放到 List 之中
 				result.add(dividend);
@@ -106,6 +119,32 @@ public class DividendService {
 		return result;
 	}
 
+	public void getIndustryByIssuingCompany(String issuingCompanies[]) throws SQLException {
+		DividendRepository dividendRepository = new DividendRepository();
+		Connection conn = dividendRepository.getConnection();
+		List<Dividend> result = new ArrayList<Dividend>();
+		for(String issuingCompany:issuingCompanies) {
+			result = dividendRepository.getIndustryByIssuingCompany(issuingCompany,conn);
+				switch(result.get(0).getIndustry()){
+					case financial:
+						System.out.println(IndustryEnum.financial.getCode()+IndustryEnum.financial.getDescription());
+						break;
+					case semiconductor:
+						System.out.println(IndustryEnum.semiconductor.getCode()+IndustryEnum.semiconductor.getDescription());
+						break;
+					case steel:
+						System.out.println(IndustryEnum.steel.getCode()+IndustryEnum.semiconductor.getDescription());
+						break;
+					case biomedical:
+						System.out.println(IndustryEnum.biomedical.getCode()+IndustryEnum.biomedical.getDescription());
+						break;
+			        default:
+			            break;
+			}
+		}
+		
+		
+	}
 	public void fileWrite() throws IOException, SQLException {
 
 		
@@ -121,6 +160,7 @@ public class DividendService {
 			bufwriter.write("AllocationOfAnnual  "+"CashDividend  "+"StockDividend  "+"Total  "+"TotalCashDividendUnit  "+"ShareholdingRatio  "+"IssuingCompany");
 			bufwriter.newLine();
 			for(Dividend dividend :result) {
+//			System.out.println("Write " + dividend);
 			bufwriter.write(dividend.getAllocationOfAnnual()+"   ");
 			bufwriter.write(String.valueOf(dividend.getCashDividend())+"   ");
 			bufwriter.write(String.valueOf(dividend.getStockDividend())+"   ");

@@ -2,31 +2,51 @@ package tw.com.fcb.sample.io.kai;
 
 import java.io.FileInputStream;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+
 public class FileRepository {
 	List<FileSecurities> list = null;
 	FileSecurities fileSecurities = null;
+	HikariDataSource ds = null;
+	
+	public FileRepository() throws Exception{
+//        HikariConfig config = new HikariConfig();
+//        config.setJdbcUrl("jdbc:postgresql://localhost:5432/testdb");
+//        config.setUsername("postgres");
+//        config.setPassword("postgres");
+//        config.addDataSourceProperty("minimumIdle", "10");
+//        config.addDataSourceProperty("maximumPoolSize", "30");
+//        this.ds = new HikariDataSource(config);
+		
+		LocalDateTime starTime = LocalDateTime.now();
+		Properties props = new Properties();
+		props.load(new FileInputStream("jdbc.properties"));
+		
+		HikariConfig config = new HikariConfig();
+		config.setJdbcUrl(props.getProperty("dbUrl"));
+		config.setUsername(props.getProperty("username"));
+		config.setPassword(props.getProperty("password"));
+		config.addDataSourceProperty("minimumIdle", "10");
+		config.addDataSourceProperty("maximumPoolSize", "30");
+		this.ds = new HikariDataSource(config);
+		
+		LocalDateTime endTime = LocalDateTime.now();
+		Long diff = ChronoUnit.MILLIS.between(starTime, endTime);
+		System.out.println("Total Sec: " + diff + " msec");
+	}
 	
 	// getConnection()
 	public Connection getConnection() throws Exception {
-		Properties props = new Properties();
-		String dbUrl = null, username = null, password = null;
-		
-//		String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
-//		String username = "postgres";
-//		String password = "postgres";
-		props.load(new FileInputStream("jdbc.properties"));
-		dbUrl = props.getProperty("dbUrl");
-		username = props.getProperty("username");
-		password = props.getProperty("password");
-		
-		return DriverManager.getConnection(dbUrl, username, password);
+		return ds.getConnection();
 	}
 	
 	// findAll()
@@ -51,6 +71,8 @@ public class FileRepository {
 			fileSecurities.setEtfCode(resultSet.getString("etfcode"));
 			fileSecurities.setEtfName(resultSet.getString("etfname"));
 			fileSecurities.setEtfTransaction(resultSet.getString("etftransaction"));
+			fileSecurities.setCurrencyEnum(FileCurrencyEnum.valueOf(resultSet.getString("curr_code")));
+
 			list.add(fileSecurities);
 		}
 		
@@ -79,6 +101,8 @@ public class FileRepository {
 			fileSecurities.setEtfCode(resultSet.getString("etfcode"));
 			fileSecurities.setEtfName(resultSet.getString("etfname"));
 			fileSecurities.setEtfTransaction(resultSet.getString("etftransaction"));
+			fileSecurities.setCurrencyEnum(FileCurrencyEnum.valueOf(resultSet.getString("curr_code")));
+			
 			list.add(fileSecurities);
 		}
 		
@@ -108,6 +132,8 @@ public class FileRepository {
 			fileSecurities.setEtfCode(resultSet.getString("etfcode"));
 			fileSecurities.setEtfName(resultSet.getString("etfname"));
 			fileSecurities.setEtfTransaction(resultSet.getString("etftransaction"));
+			fileSecurities.setCurrencyEnum(FileCurrencyEnum.valueOf(resultSet.getString("curr_code")));
+			
 			list.add(fileSecurities);
 		}
 		
@@ -137,6 +163,8 @@ public class FileRepository {
 			fileSecurities.setEtfCode(resultSet.getString("etfcode"));
 			fileSecurities.setEtfName(resultSet.getString("etfname"));
 			fileSecurities.setEtfTransaction(resultSet.getString("etftransaction"));
+			fileSecurities.setCurrencyEnum(FileCurrencyEnum.valueOf(resultSet.getString("curr_code")));
+			
 			list.add(fileSecurities);
 		}
 		else {
@@ -152,8 +180,14 @@ public class FileRepository {
 		PreparedStatement pStatement = null;
 
 		connection = getConnection();
-			
-		String insertSql = "INSERT INTO stock VALUES(?, ?, ?, ?, ?, ?, ?)";
+		
+		//方法一
+		//CREATE type curr_enum as enum('USD', 'EUR', 'JPY', 'ZAR', 'TWD');
+		//因為DB有設定ENUM型態，所以在傳值時需指定::curr_enum
+		//String insertSql = "INSERT INTO stock VALUES(?, ?, ?, ?, ?, ?, ?, ?::curr_enum)";
+		//pStatement.setString(8, fileSecurities.getCurrencyEnum().name());
+		
+		String insertSql = "INSERT INTO stock VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 		pStatement = connection.prepareStatement(insertSql);
 		pStatement.setString(1, fileSecurities.getSecuritiesOrder());
 		pStatement.setString(2, fileSecurities.getStockCode());
@@ -162,6 +196,7 @@ public class FileRepository {
 		pStatement.setString(5, fileSecurities.getEtfCode());
 		pStatement.setString(6, fileSecurities.getEtfName());
 		pStatement.setString(7, fileSecurities.getEtfTransaction());
+		pStatement.setObject(8, fileSecurities.getCurrencyEnum(), java.sql.Types.OTHER);
 		pStatement.executeUpdate();
 		pStatement.clearParameters();
 	}

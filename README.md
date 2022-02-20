@@ -207,7 +207,9 @@ public class Model {
 * void insert(Model model);
 * void update(Model model);
 * void delete(Long id);
-
+	
+	
+	
 ## 不要使用 Statement 避免 SQL-Injection
 
 改用 PreparedStatement
@@ -246,7 +248,305 @@ ResultSet rs = pstmt.executeQuery();
 ````
 
 
+# Course 7 Use Opensources
 
+## 學習查找與使用 opensources
+以 database connection pooling 為概念, 我們需要一個 connection pooling, 
+如何上網 Goolge 查找發現比較適合的 connection pooling, 並且使用 maven pom.xml 定義相關 dependencies,
+我們可以發現這篇文章(https://medium.com/@jeevanpaatil/database-connection-pool-analysis-92d50ba4bd06)提到了許多 connection pooling 機制,
+此時, 我們可以選擇比較推薦的 HikariCP(https://github.com/brettwooldridge/HikariCP) 作為範例測試。
+	
+根據相關的說明, 我們可以很快地定義好相關的程式碼
+````java
+	HikariDataSource ds;
+	
+	public FruitRepository() {
+		
+		
+		
+		HikariConfig config = new HikariConfig();
+		config.setJdbcUrl("jdbc:postgresql://localhost:5432/testdb");
+		config.setUsername("postgres");
+		config.setPassword("postgres");
+		config.addDataSourceProperty("minimumIdle", "10");
+		config.addDataSourceProperty("maximumPoolSize", "30");
+		
+		
+		
+		this.ds = new HikariDataSource(config);
+	}
+	
+	
+	private Connection getConnection() throws SQLException {
+		return ds.getConnection();
+//		
+//		
+//		//Class.forName("org.postgresql.Driver");
+//		String dbUrl = "jdbc:postgresql://localhost:5432/testdb";
+//		String username = "postgres";
+//		String password = "postgres";
+//		return DriverManager.getConnection(dbUrl, username, password);
+			
+	}
+````
+比較了運行的結果, 比起原本 Connection 不斷 I/O 重新連線花上 41 秒, 到不用 1 秒鐘, 大幅提升了運作效能。
+	
+## Date 的使用 (參考java技術手冊第13章, java.util.* 可以不用看了)
+
+先說結論, 在 java8 之後, 應該大量使用 java.time.* 的日期與時間, java.time package 大量參考了 jodatime 的設計, JDBC 4.2 版本之後也完全支持 java.time .
+	
+* java.time.LocalDate
+* java.time.LocalDateTime
+	
+可以透過 of(...) 的 method 進行預設值的配置. 
+
+````java
+// 計算 do something 的時間範例(msec級)	
+LocalDateTime startTime = LocalDateTime.now();
+// do something
+LocalDateTime stopTime = LocalDateTime.now();
+Long diff = ChronoUnit.MILLIS.between(startTime, stopTime);
+System.out.println("total "+diff+" msec");
+````
+	
+以往 java 內建的 java.util.Date 與 java.util.Calendar, 簡單來說, 太難用, 根本就直接可以捨棄. 不然就是搭配 java.text.DateFormat 一併寫 Utils 來處理, 還是太麻煩.
+	
+	
+## Annotation 的概念
+Annotation 是 java 5 開始用的設計, 主要是參考 .net 的設計, 作為 **描述用**
+	
+@Target : 描述的目標有
+* ElementType.TYPE : 能描述 class, interface, enum 等
+* ElementType.FIELD : 能描述相關的變數
+* ElementType.METHOD : 能描述方法
+* ElementType.PARAMETER : 能描述方法內的參數值
+* ElementType.CONSTRUCTOR : 能描述建構子
+* ElementType.LOCAL_VARIABLE : 能描述局部變數
+* ElementType.ANNOTATION_TYPE : 能描述其他的 annotation
+* ElementType.PACKAGE : 能描述 package
+	
+@Retention : 表示這個 annotation 的生命週期
+可選的值有三種
+* RetentionPolicy.SOURCE 表示此 annotation 只在 source java 中有效果，不會編譯進class文件, @Override就是這種注解
+* RetentionPolicy.CLASS  表示此 annotation 除了在 source java 有效果，也會編譯進class文件，但是在 runtime 是無效果的, @Retention的默認值，即是當沒有指定@Retention的時候，就會是這種類型
+* RetentionPolicy.RUNTIME 表示此 annotation 從 source java 到 runtime 一直存在, 程序可以透過 reflection 獲取這個 annotation 的訊息 
+	
+annotation 就是描述而已, 該怎麼表現和應用, 都是其他程式發現該 annotation 給予相關的行為。
+
+## Annotation Processing Tool (高階研究)
+https://docs.oracle.com/javase/7/docs/technotes/guides/apt/GettingStarted.html
+	
+## Project Lombok (https://projectlombok.org/)
+lombok 就是在 source 上面定義了一些 annotation, 在 javac compile 真正產生 class 之前, 
+把相關的 java code 產出中繼的 java code, 簡化我們實際撰寫 javabean 的內容. 
+我們通常會用到
+	* @Data
+	* @Builder
+	* @Log (暫時不練習) 
+或是要細膩到控制 @Getter @Setter @ToString 及 @EqualsAndHashCode
+另外, 在某些特殊狀況, 我們也會控制建構子 @NoArgsConstructor, @RequiredArgsConstructor and @AllArgsConstructor 
+大家可以多練習與比較差異.
+	
+## enum (請參考java技術手冊第18章)
+java 5 之前沒有 enum, 幾乎都是用 String 來接值, 接著就得去判斷該 String 是否符合規範. 而 enum 就是明定只能接受這些數值的定義.
+	
+
+````java
+public enum Sex {
+  M,
+  F,
+}
+````
+	
+可以利用 Sex sex = Sex.valueOf("M"); 來指定該 sex 的內容. 
+
+## Homework 
+練習定義一個 enum 並加入到自己的 object 之中.
+	
+	
+
+
+# Course 8 OOP, Logging, Web, Thread
+
+## Abstract Class and Interface
+
+* interface 我們用來做定義 implements 的 class 一定要具備哪些 methods, 主要目的是就是初期定義介面用, 來強制大家去實作相關 methods.
+* abstract class 雖然也可以要求大家一定要去實作 abstract methods, 但是, 主要目的是 reusable (重用), 通常會是重構時將相關重複的程式碼抽出.
+
+
+例如, 我們發現 PG1Service 與 PG2Service 具有雷同的流程與相似的程式碼, 可以抽出相關的程式作為共用的 method, 
+但是流程之中有不同的地方時, 我們可以抽出來一個 abstract method 交給繼承者去實作即可.
+
+````java
+	public void doIO() {
+	
+		System.out.println("READ CIF");
+		
+		System.out.println("READ RATE");
+		
+		save();
+		
+	}
+	
+	abstract void save();
+
+````
+
+## Logging
+
+logging 的實作有非常多, 我們通常使用 slf4j 作為統一的介面, 去存取相關的 logging implementations, 只需要在 classpath 之中放入以下的 jar 及該 logging 實作 jar 檔案即可
+
+* slf4j-nop.jar 
+* slf4j-simple.jar, 
+* slf4j-log4j12.jar, 
+* slf4j-jdk14.jar 
+* logback-classic.jar
+
+以目前來說, 我們比較推薦使用 logback ( https://logback.qos.ch/manual/index.html ), 不過現在 slf4j 2.0 尚未穩定, 所以 hikari 有用到 2.0 的部份, 請在 pom.xml 之中 exclude 掉
+
+````xml
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+			<version>5.0.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+````
+
+
+接著, 在 /src/main/resources/ 之下放入 logback.xml
+
+````xml
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+    <logger name="tw.com.fcb.sample.io.gary" level="debug" additivity="false">
+        <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <root level="error">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>
+````
+
+使用 log 我們只需要在 class 之中透過 LoggerFactory.getLogger(getClass()); 或是直接使用 lombok 的 @Log 
+
+````java
+package a.b.c;
+
+public class SomeClass {
+
+	Logger log = LoggerFactory.getLogger(SomeClass.class);
+	
+	public void someMethod() {
+	
+		log.debug("this is debug");
+		log.info("this is info");
+		log.warn("this is warn");
+		log.error("this is error");
+		log.fatal("this is fatal");
+		
+	}
+}
+````
+當 root 等級設定為 warn, 只有 warn, error, 與 fatal 較高等級的訊息會被印出, 如果設定 debug, 就是所有訊息等級都會印出.
+我們可以把 root 等級設定為 error, 我們正在執行修改或關注的 package, 可以設定為較低的等級, 例如 debug, 這樣就可以避免過多的訊息造成除錯的噪音.
+另外, logger appender 可以設定輸出的格式與輸出的目標.
+在未來微服務架構, 我們會使用 
+
+* logstash
+* fluentd
+* filebeat
+
+
+來蒐集 log 資訊, 集中到 ElasticSearch, 再交由 Kibana 進行 log 追蹤與查詢. 因此, 要懂得如何去控制 log 的多寡, 未來 coding rule 也得規範那些訊息一定要印出.
+
+## Web
+
+JavaEE 之中, 有定義了
+* Servlet
+* Filter
+* Listener
+
+不過, 新手比較需要關注的是 Servlet, 一個 Servlet 現在只要指定該 class extends HttpServlet 是 @WebServlet, 裡面定義連結的 URL
+
+
+````java
+@WebServlet("/hello")
+public class HelloServlet extends HttpServlet {
+
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+		PrintWriter out = response.getWriter();
+		
+		out.println("Hello "+request.getParameter("name"));
+		
+		
+		// response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+}
+````
+
+如果只是處理 HttpMethod 的 GET method (預設的瀏覽器連結網站就是 GET method), 我們只需要寫 doGet methods.
+doGet method 的 arguments 之中主要是
+* HttpServletRequest
+* HttpServletResponse
+
+* 我們取得外部變數是使用 request.getParameter("parameter name, if you use ?a=1, the name is 'a'");
+* 我們要寫出為網頁是使用 response.getWriter().println("content...you can use HTML here.")
+
+當我們 Servlet 接到之後, 就可以利用接到的數值傳到後端 Service, 就可以到資料庫存取資料再透過 response.getWriter() 去輸出到網頁. 
+
+
+
+## Thread
+Thread 的議題, 可以在未來更多的應用中再討論
+
+
+
+
+## Homework
+寫 /yourmodels 的 GET method, 包含查詢全部和 ID 單筆查詢, 請參考 /fcb-web repository.
+
+
+
+
+
+
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+		
 
 
 

@@ -1,5 +1,7 @@
 package tw.com.fcb.sample.io.copykobe0103;
 
+import tw.com.fcb.sample.io.cj.VehicleBrandEnum;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +30,8 @@ public class ConsumptionRepository {
             consumption = new Consumption();
             consumption.setId(resultSet.getLong("id"));
             consumption.setYearMonth(resultSet.getString("yearmonth"));
-            consumption.setRegion(resultSet.getString("region"));
+//            consumption.setRegion(resultSet.getString("region"));
+            consumption.setRegion(ConsumptionRegionEnum.valueOf(resultSet.getString("region")));
             consumption.setCrossBorderPercentage(resultSet.getString("crossBorderPercentage"));
             consumption.setCardCount(resultSet.getDouble("cardCount"));
             consumption.setTotalTradeCount(resultSet.getDouble("totalTradeCount"));
@@ -56,7 +59,8 @@ public class ConsumptionRepository {
             consumption = new Consumption();
             consumption.setId(resultSet.getLong("id"));
             consumption.setYearMonth(resultSet.getString("yearmonth"));
-            consumption.setRegion(resultSet.getString("region"));
+//            consumption.setRegion(resultSet.getString("region"));
+            consumption.setRegion(ConsumptionRegionEnum.valueOf(resultSet.getString("region")));
             consumption.setCrossBorderPercentage(resultSet.getString("crossBorderPercentage"));
             consumption.setCardCount(resultSet.getDouble("cardCount"));
             consumption.setTotalTradeCount(resultSet.getDouble("totalTradeCount"));
@@ -106,7 +110,8 @@ public class ConsumptionRepository {
             consumption = new Consumption();
             consumption.setId(resultSet.getLong("id"));
             consumption.setYearMonth(resultSet.getString("yearmonth"));
-            consumption.setRegion(resultSet.getString("region"));
+//            consumption.setRegion(resultSet.getString("region"));
+            consumption.setRegion(ConsumptionRegionEnum.valueOf(resultSet.getString("region")));
             consumption.setCrossBorderPercentage(resultSet.getString("crossBorderPercentage"));
             consumption.setCardCount(resultSet.getDouble("cardCount"));
             consumption.setTotalTradeCount(resultSet.getDouble("totalTradeCount"));
